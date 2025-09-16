@@ -12,6 +12,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 @Table(name = "flights")
 @Entity
@@ -29,18 +30,17 @@ public class Flight {
     @Column(nullable = false)
     private String destination;
 
-    @NotBlank
+    @NotNull
     @Column(nullable = false)
     private LocalDate date;
 
-    @NotBlank
+    @NotNull
     @Column(nullable = false)
     private LocalTime hour;
 
-    @NotBlank
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    private Status status;
+    private Status status = Status.AVAILABLE;
 
     @ManyToOne
     @JoinColumn(name = "airline_id")
