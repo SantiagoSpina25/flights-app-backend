@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.santiago.flightsapp.flights_app.dto.FlightDto;
 import com.santiago.flightsapp.flights_app.entities.Flight;
 import com.santiago.flightsapp.flights_app.repositories.FligthRepository;
 
@@ -16,43 +17,42 @@ public class FlightServiceImpl implements FlightService {
     private FligthRepository repository;
 
     @Override
-    public List<Flight> findAll() {
-        return (List<Flight>) repository.findAll();
+    public List<FlightDto> findAll() {
+        List<Flight> flightlList = (List<Flight>) repository.findAll();
+        return flightlList.stream().map(f -> FlightDto.toDto(f)).toList();
     }
 
     @Override
-    public Optional<Flight> findById(String id) {
-        return repository.findById(id);
+    public Optional<FlightDto> findById(String id) {
+        return repository.findById(id).map(f -> FlightDto.toDto(f));
     }
 
     @Override
-    public Flight save(Flight flight) {
-        return repository.save(flight);
+    public FlightDto save(Flight flight) {
+        return FlightDto.toDto(repository.save(flight));
     }
 
     @Override
-    public Optional<Flight> update(String id, Flight flight) {
-        Optional<Flight> flightOptional = repository.findById(id);
-        
-        if(flightOptional.isPresent()){
-            Flight newFlight = new Flight();
-            newFlight.setOrigin(flight.getOrigin());
-            newFlight.setDestination(flight.getDestination());
-            newFlight.setDate(flight.getDate());
-            newFlight.setHour(flight.getHour());
-            newFlight.setStatus(flight.getStatus());
+    public Optional<FlightDto> update(String id, Flight flight) {
+        return repository.findById(id).map(existingFlight -> {
+            existingFlight.setOrigin(flight.getOrigin());
+            existingFlight.setDestination(flight.getDestination());
+            existingFlight.setDate(flight.getDate());
+            existingFlight.setHour(flight.getHour());
+            existingFlight.setStatus(flight.getStatus());
+            existingFlight.setAirline(flight.getAirline());
+            existingFlight.setUser(flight.getUser());
 
-            return Optional.of(repository.save(newFlight));
-        }
-
-        return flightOptional;
+            Flight saved = repository.save(existingFlight);
+            return FlightDto.toDto(saved);
+        });
     }
 
     @Override
-    public Optional<Flight> delete(String id) {
-        Optional<Flight> flightOptional = repository.findById(id);
-        
-        if(flightOptional.isPresent()){
+    public Optional<FlightDto> delete(String id) {
+        Optional<FlightDto> flightOptional = repository.findById(id).map(f-> FlightDto.toDto(f));
+
+        if (flightOptional.isPresent()) {
             repository.deleteById(id);
         }
 

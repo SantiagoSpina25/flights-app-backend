@@ -3,16 +3,17 @@ package com.santiago.flightsapp.flights_app.services;
 import java.util.List;
 import java.util.Optional;
 
+import com.santiago.flightsapp.flights_app.dto.FlightDto;
 import com.santiago.flightsapp.flights_app.entities.Flight;
 
 public interface FlightService {
-    List<Flight> findAll();
+    List<FlightDto> findAll();
 
-    Optional<Flight> findById(String id);
+    Optional<FlightDto> findById(String id);
 
-    Flight save(Flight flight);
+    FlightDto save(Flight flight);
 
-    Optional<Flight> update(String id, Flight flight);
+    Optional<FlightDto> update(String id, Flight flight);
 
-    Optional<Flight> delete(String id);
+    Optional<FlightDto> delete(String id);
 }

@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.santiago.flightsapp.flights_app.dto.FlightDto;
 import com.santiago.flightsapp.flights_app.entities.Flight;
 import com.santiago.flightsapp.flights_app.services.FlightService;
 
@@ -27,14 +28,14 @@ public class FlightController {
     private FlightService service;
 
     @GetMapping
-    public List<Flight> findAll() {
+    public List<FlightDto> findAll() {
         return service.findAll();
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<?> findById(@PathVariable String id) {
 
-        Optional<Flight> flightOptional = service.findById(id);
+        Optional<FlightDto> flightOptional = service.findById(id);
 
         return ResponseEntity.ok(flightOptional.orElseThrow(() -> null));
     }

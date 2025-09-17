@@ -33,7 +33,11 @@ public class User {
     @Column(nullable = false, length = 20)
     private String password;
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(
+        mappedBy = "user", 
+        // fetch = FetchType.LAZY, 
+        cascade = CascadeType.ALL)
+
     private List<Flight> flights = new ArrayList<>();
 
     public Long getId() {

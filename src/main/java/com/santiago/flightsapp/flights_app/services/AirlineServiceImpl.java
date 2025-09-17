@@ -7,7 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.santiago.flightsapp.flights_app.dto.AirlineDto;
+import com.santiago.flightsapp.flights_app.dto.FlightDto;
 import com.santiago.flightsapp.flights_app.entities.Airline;
+import com.santiago.flightsapp.flights_app.entities.Flight;
 import com.santiago.flightsapp.flights_app.repositories.AirlineRepository;
 
 @Service
@@ -18,27 +21,28 @@ public class AirlineServiceImpl implements AirlineService{
 
     @Transactional(readOnly = true)
     @Override
-    public List<Airline> findAll() {
-        return (List<Airline>) repository.findAll();
+    public List<AirlineDto> findAll() {
+        List<Airline> airlinesList = (List<Airline>) repository.findAll();
+        return airlinesList.stream().map(a -> AirlineDto.toDto(a)).toList();
     }
 
     @Transactional(readOnly = true)
     @Override
-    public Optional<Airline> findById(Long id) {
-        return repository.findById(id);
+    public Optional<AirlineDto> findById(Long id) {
+        return repository.findById(id).map(a -> AirlineDto.toDto(a));
     }
 
     @Transactional
     @Override
-    public Airline save(Airline airline) {
-        return repository.save(airline);
+    public AirlineDto save(Airline airline) {
+        return AirlineDto.toDto(repository.save(airline));
     }
 
     @Transactional
     @Override
-    public Optional<Airline> delete(Long id) {
+    public Optional<AirlineDto> delete(Long id) {
 
-        Optional<Airline> airlineOptional = repository.findById(id);
+        Optional<AirlineDto> airlineOptional = repository.findById(id).map(a-> AirlineDto.toDto(a));
 
         if(airlineOptional.isPresent()){
             repository.deleteById(id);

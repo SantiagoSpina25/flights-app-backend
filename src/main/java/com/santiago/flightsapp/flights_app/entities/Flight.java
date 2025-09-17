@@ -106,6 +106,14 @@ public class Flight {
         this.airline = airline;
     }
 
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
     @Override
     public int hashCode() {
         final int prime = 31;
@@ -131,8 +139,4 @@ public class Flight {
         return true;
     }
 
-}
-
-enum Status {
-    SOLD, AVAILABLE
 }
