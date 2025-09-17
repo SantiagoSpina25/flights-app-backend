@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.santiago.flightsapp.flights_app.dto.UserDto;
 import com.santiago.flightsapp.flights_app.entities.User;
 import com.santiago.flightsapp.flights_app.services.UserService;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -27,13 +28,13 @@ public class UserController {
     private UserService service;
 
     @GetMapping
-    public List<User> findAll() {
+    public List<UserDto> findAll() {
         return service.findAll();
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<?> findById(@PathVariable Long id) {
-        Optional<User> userOptional = service.findById(id);
+        Optional<UserDto> userOptional = service.findById(id);
 
         return ResponseEntity.ok(userOptional.orElseThrow(() -> null));
     }

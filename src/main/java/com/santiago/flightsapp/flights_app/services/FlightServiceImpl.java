@@ -8,13 +8,21 @@ import org.springframework.stereotype.Service;
 
 import com.santiago.flightsapp.flights_app.dto.FlightDto;
 import com.santiago.flightsapp.flights_app.entities.Flight;
+import com.santiago.flightsapp.flights_app.entities.Status;
+import com.santiago.flightsapp.flights_app.entities.User;
 import com.santiago.flightsapp.flights_app.repositories.FligthRepository;
+
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 
 @Service
 public class FlightServiceImpl implements FlightService {
 
     @Autowired
     private FligthRepository repository;
+
+    @PersistenceContext
+    private EntityManager em;
 
     @Override
     public List<FlightDto> findAll() {
@@ -57,6 +65,24 @@ public class FlightServiceImpl implements FlightService {
         }
 
         return flightOptional;
+    }
+
+    //METODO PARA RESERVAR UN VUELO
+    @Override
+    public Optional<FlightDto> bookFlight(String flightId, Long userId) {
+        return repository.findById(flightId).map(f -> {
+            //Primero verifica si existe, si es asi, verifica que este disponible
+            if (f.getStatus() != Status.AVAILABLE || f.getUser() != null) {
+                throw new IllegalStateException("El vuelo ya no está disponible.");
+            }
+            f.setUser(em.getReference(User.class, userId)); //Busca solo el usuario por el id sin el resto de los datos
+            f.setStatus(Status.SOLD); 
+
+            //Guardo el vuelo
+            Flight savedFlight = repository.save(f);
+
+            return FlightDto.toDto(savedFlight);
+        });
     }
 
 }

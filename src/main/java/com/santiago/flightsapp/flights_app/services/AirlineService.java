@@ -5,7 +5,6 @@ import java.util.Optional;
 
 import com.santiago.flightsapp.flights_app.dto.AirlineDto;
 import com.santiago.flightsapp.flights_app.entities.Airline;
-import com.santiago.flightsapp.flights_app.entities.User;
 
 public interface AirlineService {
     List<AirlineDto> findAll();

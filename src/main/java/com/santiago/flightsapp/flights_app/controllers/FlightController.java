@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.santiago.flightsapp.flights_app.dto.BookFlightDto;
 import com.santiago.flightsapp.flights_app.dto.FlightDto;
 import com.santiago.flightsapp.flights_app.entities.Flight;
 import com.santiago.flightsapp.flights_app.services.FlightService;
@@ -55,5 +56,11 @@ public class FlightController {
     public ResponseEntity<?> delete(@PathVariable String id){
         return ResponseEntity.ok(service.delete(id).orElseThrow(()-> null));
     }
+
+    @PostMapping("/bookFlight")
+    public ResponseEntity<?> bookFlight(@RequestBody BookFlightDto body) {
+        return ResponseEntity.ok(service.bookFlight(body.flightId(), body.userId()).orElseThrow(()-> null));
+    }
+    
 
 }

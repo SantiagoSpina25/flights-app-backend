@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.santiago.flightsapp.flights_app.dto.UserDto;
 import com.santiago.flightsapp.flights_app.entities.User;
 import com.santiago.flightsapp.flights_app.repositories.UserRepository;
 
@@ -18,27 +19,28 @@ public class UserServiceImpl implements UserService{
 
     @Transactional(readOnly = true)
     @Override
-    public List<User> findAll() {
-        return (List<User>) repository.findAll();
+    public List<UserDto> findAll() {
+        List<User> users = (List<User>) repository.findAll();
+        return users.stream().map(u->UserDto.toDto(u)).toList();
     }
 
     @Transactional(readOnly = true)
     @Override
-    public Optional<User> findById(Long id) {
-        return repository.findById(id);
+    public Optional<UserDto> findById(Long id) {
+        return repository.findById(id).map(u->UserDto.toDto(u));
     }
 
     @Transactional
     @Override
-    public User save(User user) {
-        return repository.save(user);
+    public UserDto save(User user) {
+        return UserDto.toDto(repository.save(user));
     }
 
     @Transactional
     @Override
-    public Optional<User> delete(Long id) {
+    public Optional<UserDto> delete(Long id) {
 
-        Optional<User> userOptional = repository.findById(id);
+        Optional<UserDto> userOptional = repository.findById(id).map(u->UserDto.toDto(u));
 
         if(userOptional.isPresent()){
             repository.deleteById(id);

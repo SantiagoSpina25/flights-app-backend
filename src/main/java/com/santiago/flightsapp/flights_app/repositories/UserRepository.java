@@ -7,5 +7,5 @@ import com.santiago.flightsapp.flights_app.entities.User;
 
 @Repository
 public interface UserRepository extends CrudRepository<User, Long> {
-
+    
 }

@@ -16,4 +16,6 @@ public interface FlightService {
     Optional<FlightDto> update(String id, Flight flight);
 
     Optional<FlightDto> delete(String id);
+
+    Optional<FlightDto> bookFlight(String flightId, Long userId);
 }
