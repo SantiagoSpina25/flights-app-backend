@@ -8,6 +8,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
+import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -45,6 +46,14 @@ public class GlobalExceptionHandler {
         MultipleErrorsResponse errorResponse = new MultipleErrorsResponse(400, errors, "Los argumentos introducidos no son validos");
 
         return ResponseEntity.status(400).body(errorResponse);
+    }
+
+    //Excepcion que ocurre cuando se pone un endpoint erroneo
+    @ExceptionHandler(NoResourceFoundException.class)
+    public ResponseEntity<ErrorResponse> resourceNotFound(NoResourceFoundException e) {
+        ErrorResponse errorResponse = new ErrorResponse(404, "Error recurso no encontrado", e.getMessage());
+
+        return ResponseEntity.status(404).body(errorResponse);
     }
 
 }
