@@ -6,8 +6,6 @@ import java.time.temporal.ChronoUnit;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -32,16 +30,13 @@ public class Flight {
     private String destination;
 
     @NotNull
-    @Column(nullable = false)
     private LocalDate date = LocalDate.now(); // Por defecto la fecha actual
 
     @NotNull
-    @Column(nullable = false)
     private LocalTime hour = LocalTime.now().truncatedTo(ChronoUnit.SECONDS); // Por defecto la hora actual (chronoUnit
                                                                               // corta los milisegundos)
 
     @Column(nullable = false)
-    @Enumerated(EnumType.STRING)
     private Status status = Status.AVAILABLE; // Por defecto disponible
 
     @ManyToOne

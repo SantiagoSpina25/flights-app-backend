@@ -21,6 +21,8 @@ import com.santiago.flightsapp.flights_app.entities.Airline;
 import com.santiago.flightsapp.flights_app.exceptions.AirlineNotFoundException;
 import com.santiago.flightsapp.flights_app.services.AirlineService;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("/api/airlines")
 public class AirlineController {
@@ -41,7 +43,7 @@ public class AirlineController {
     }
 
     @PostMapping
-    public ResponseEntity<?> create(@RequestBody Airline airline) {
+    public ResponseEntity<?> create(@Valid @RequestBody Airline airline) {
         return ResponseEntity.status(HttpStatus.CREATED).body(service.save(airline));
     }
 

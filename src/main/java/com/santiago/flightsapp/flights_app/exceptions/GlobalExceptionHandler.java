@@ -1,6 +1,10 @@
 package com.santiago.flightsapp.flights_app.exceptions;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
@@ -29,6 +33,18 @@ public class GlobalExceptionHandler {
 
         return ResponseEntity.status(400).body(errorResponse);
         
+    }
+
+    //Excepcion que ocurre cuando hay un error en la validacion de una entidad
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<MultipleErrorsResponse> validationError(MethodArgumentNotValidException e) {
+        Map<String,String> errors = new HashMap<>();
+        e.getFieldErrors().forEach(er->{
+            errors.put(er.getField(), "Error en el campo '" + er.getField() + "', " + er.getDefaultMessage());
+        });
+        MultipleErrorsResponse errorResponse = new MultipleErrorsResponse(400, errors, "Los argumentos introducidos no son validos");
+
+        return ResponseEntity.status(400).body(errorResponse);
     }
 
 }

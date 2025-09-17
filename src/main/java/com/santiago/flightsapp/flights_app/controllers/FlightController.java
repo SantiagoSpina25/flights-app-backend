@@ -15,6 +15,8 @@ import com.santiago.flightsapp.flights_app.entities.Flight;
 import com.santiago.flightsapp.flights_app.exceptions.FlightNotFoundException;
 import com.santiago.flightsapp.flights_app.services.FlightService;
 
+import jakarta.validation.Valid;
+
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -43,7 +45,7 @@ public class FlightController {
     }
 
     @PostMapping
-    public ResponseEntity<?> create(@RequestBody Flight flight) {
+    public ResponseEntity<?> create(@Valid @RequestBody Flight flight) {
         return ResponseEntity.status(HttpStatus.CREATED).body(service.save(flight));
     }
 

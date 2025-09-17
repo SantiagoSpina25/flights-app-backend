@@ -18,6 +18,9 @@ import com.santiago.flightsapp.flights_app.dto.UserDto;
 import com.santiago.flightsapp.flights_app.entities.User;
 import com.santiago.flightsapp.flights_app.exceptions.UserNotFoundException;
 import com.santiago.flightsapp.flights_app.services.UserService;
+
+import jakarta.validation.Valid;
+
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -41,7 +44,7 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<?> create(@RequestBody User user) {
+    public ResponseEntity<?> create(@Valid @RequestBody User user) {
         return ResponseEntity.status(HttpStatus.CREATED).body(service.save(user));
     }
 
