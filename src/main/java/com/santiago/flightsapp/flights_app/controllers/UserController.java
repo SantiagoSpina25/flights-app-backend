@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.santiago.flightsapp.flights_app.dto.UserDto;
 import com.santiago.flightsapp.flights_app.entities.User;
-import com.santiago.flightsapp.flights_app.exceptions.UserNotFoundException;
+import com.santiago.flightsapp.flights_app.exceptions.user.UserNotFoundException;
 import com.santiago.flightsapp.flights_app.services.UserService;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
