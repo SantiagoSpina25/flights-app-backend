@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.santiago.flightsapp.flights_app.dto.UserDto;
 import com.santiago.flightsapp.flights_app.entities.User;
+import com.santiago.flightsapp.flights_app.exceptions.UserNotFoundException;
 import com.santiago.flightsapp.flights_app.services.UserService;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -35,8 +36,8 @@ public class UserController {
     @GetMapping("/{id}")
     public ResponseEntity<?> findById(@PathVariable Long id) {
         Optional<UserDto> userOptional = service.findById(id);
-
-        return ResponseEntity.ok(userOptional.orElseThrow(() -> null));
+        
+        return ResponseEntity.ok(userOptional.orElseThrow(() -> new UserNotFoundException(id)));
     }
 
     @PostMapping("/register")
@@ -46,7 +47,7 @@ public class UserController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable Long id) {
-        service.delete(id).orElseThrow(() -> null);
+        service.delete(id).orElseThrow(() -> new UserNotFoundException(id));
         Map<String, String> json = new HashMap<>();
         json.put("message", "Usuario con el id " + id + " borrado correctamente!");
 
