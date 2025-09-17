@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.santiago.flightsapp.flights_app.dto.AirlineDto;
 import com.santiago.flightsapp.flights_app.entities.Airline;
+import com.santiago.flightsapp.flights_app.exceptions.AirlineNotFoundException;
 import com.santiago.flightsapp.flights_app.services.AirlineService;
 
 @RestController
@@ -36,7 +37,7 @@ public class AirlineController {
     public ResponseEntity<?> findById(@PathVariable Long id) {
         Optional<AirlineDto> airlineOptional = service.findById(id);
 
-        return ResponseEntity.ok(airlineOptional.orElseThrow(() -> null));
+        return ResponseEntity.ok(airlineOptional.orElseThrow(() -> new AirlineNotFoundException(id)));
     }
 
     @PostMapping
@@ -46,7 +47,7 @@ public class AirlineController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable Long id) {
-        service.delete(id).orElseThrow(() -> null);
+        service.delete(id).orElseThrow(() -> new AirlineNotFoundException(id));
         Map<String, String> json = new HashMap<>();
         json.put("message", "Aerolinea con el id " + id + " borrada correctamente!");
 

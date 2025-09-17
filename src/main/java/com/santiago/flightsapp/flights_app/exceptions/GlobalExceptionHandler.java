@@ -5,16 +5,14 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
-import com.santiago.flightsapp.flights_app.exceptions.user.UserNotFoundException;
-
 @RestControllerAdvice
 public class GlobalExceptionHandler {
     
     // Excepcion que ocurre cuando no se encuentra un usuario con el id pasado por
     // parametros
-    @ExceptionHandler(UserNotFoundException.class)
-    public ResponseEntity<ErrorResponse> userNotFound(UserNotFoundException e) {
-        ErrorResponse errorResponse = new ErrorResponse(404, "Error usuario no encontrado", e.getMessage());
+    @ExceptionHandler({UserNotFoundException.class, FlightNotFoundException.class, AirlineNotFoundException.class})
+    public ResponseEntity<ErrorResponse> idNotfound(Exception e) {
+        ErrorResponse errorResponse = new ErrorResponse(404, "Error id no encontrado", e.getMessage());
 
         return ResponseEntity.status(404).body(errorResponse);
     }
@@ -32,4 +30,5 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(400).body(errorResponse);
         
     }
+
 }
