@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.santiago.flightsapp.flights_app.dto.BookFlightDto;
+import com.santiago.flightsapp.flights_app.dto.FlightCreateRequestDto;
 import com.santiago.flightsapp.flights_app.dto.FlightDto;
 import com.santiago.flightsapp.flights_app.entities.Flight;
 import com.santiago.flightsapp.flights_app.exceptions.FlightNotFoundException;
@@ -45,7 +46,7 @@ public class FlightController {
     }
 
     @PostMapping
-    public ResponseEntity<?> create(@Valid @RequestBody Flight flight) {
+    public ResponseEntity<?> create(@Valid @RequestBody FlightCreateRequestDto flight) {
         return ResponseEntity.status(HttpStatus.CREATED).body(service.save(flight));
     }
 

@@ -6,10 +6,14 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.santiago.flightsapp.flights_app.dto.FlightCreateRequestDto;
 import com.santiago.flightsapp.flights_app.dto.FlightDto;
+import com.santiago.flightsapp.flights_app.entities.Airline;
 import com.santiago.flightsapp.flights_app.entities.Flight;
 import com.santiago.flightsapp.flights_app.entities.Status;
 import com.santiago.flightsapp.flights_app.entities.User;
+import com.santiago.flightsapp.flights_app.exceptions.AirlineNotFoundException;
+import com.santiago.flightsapp.flights_app.repositories.AirlineRepository;
 import com.santiago.flightsapp.flights_app.repositories.FligthRepository;
 
 import jakarta.persistence.EntityManager;
@@ -20,6 +24,9 @@ public class FlightServiceImpl implements FlightService {
 
     @Autowired
     private FligthRepository repository;
+
+    @Autowired
+    private AirlineRepository airlineRepository;
 
     @PersistenceContext
     private EntityManager em;
@@ -36,8 +43,21 @@ public class FlightServiceImpl implements FlightService {
     }
 
     @Override
-    public FlightDto save(Flight flight) {
-        return FlightDto.toDto(repository.save(flight));
+    public FlightDto save(FlightCreateRequestDto flight) {
+
+        //Compruebo primero que el id de la aerolinea introducida exista
+        Airline airline = airlineRepository.findById(flight.getAirlineId()).orElseThrow(()-> new AirlineNotFoundException(flight.getAirlineId()));
+
+        Flight newFlight = new Flight();
+        newFlight.setId(flight.getId());
+        newFlight.setOrigin(flight.getOrigin());
+        newFlight.setDestination(flight.getDestination());
+        newFlight.setDate(flight.getDate());
+        newFlight.setHour(flight.getHour());
+        newFlight.setStatus(flight.getStatus());
+        newFlight.setAirline(airline);
+
+        return FlightDto.toDto(repository.save(newFlight));
     }
 
     @Override
