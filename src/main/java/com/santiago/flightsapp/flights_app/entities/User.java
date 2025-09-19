@@ -24,12 +24,12 @@ public class User {
 
     @NotBlank
     @Size(min = 4, max = 20)
-    @Column(nullable = false, length = 20)
+    @Column(nullable = false, length = 30)
     private String username;
 
     @NotBlank
-    @Size(min = 4, max = 20)
-    @Column(nullable = false, length = 20)
+    @Size(min = 4, max = 80)
+    @Column(nullable = false, length = 80) 
     private String password;
 
     @OneToMany(
