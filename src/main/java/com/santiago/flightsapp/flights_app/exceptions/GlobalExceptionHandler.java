@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -58,6 +59,8 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(404).body(errorResponse);
     }
 
+    // Excepcion que ocurre cuando se indica un metodo (por ejemplo POST en vez de
+    // GET) que no es valido para el endpoint
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
     public ResponseEntity<ErrorResponse> methodNotSupported(HttpRequestMethodNotSupportedException e) {
         String message = String.format("El metodo '%s' no esta permitido en este endpoint. Metodos soportados: %s",
@@ -66,6 +69,14 @@ public class GlobalExceptionHandler {
         ErrorResponse errorResponse = new ErrorResponse(405, "Error metodo erroneo", message);
 
         return ResponseEntity.status(405).body(errorResponse);
+    }
+
+    // Excepcion que ocurre cuando el body esta mal formado
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public ResponseEntity<ErrorResponse> notReadable(HttpMessageNotReadableException e) {
+        ErrorResponse errorResponse = new ErrorResponse(400, "Bad request", "El body de la peticion esta mal formado");
+
+        return ResponseEntity.status(400).body(errorResponse);
     }
 
 }
