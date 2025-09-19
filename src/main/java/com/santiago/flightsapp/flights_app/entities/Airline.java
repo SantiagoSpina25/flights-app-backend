@@ -12,15 +12,12 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
+
 
 @Table(name = "airlines")
 @Entity
-@Getter
-@Setter
-@EqualsAndHashCode
+@Data
 public class Airline {
 
     @Id

@@ -14,15 +14,11 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
 @Table(name = "flights")
 @Entity
-@Getter
-@Setter
-@EqualsAndHashCode
+@Data
 public class Flight {
 
     @Id
