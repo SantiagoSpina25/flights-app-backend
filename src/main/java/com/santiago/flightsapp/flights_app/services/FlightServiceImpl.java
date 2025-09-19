@@ -13,6 +13,8 @@ import com.santiago.flightsapp.flights_app.entities.Flight;
 import com.santiago.flightsapp.flights_app.entities.Status;
 import com.santiago.flightsapp.flights_app.entities.User;
 import com.santiago.flightsapp.flights_app.exceptions.AirlineNotFoundException;
+import com.santiago.flightsapp.flights_app.exceptions.FlightNotAvailableException;
+import com.santiago.flightsapp.flights_app.exceptions.UserNotFoundException;
 import com.santiago.flightsapp.flights_app.repositories.AirlineRepository;
 import com.santiago.flightsapp.flights_app.repositories.FligthRepository;
 
@@ -91,14 +93,23 @@ public class FlightServiceImpl implements FlightService {
     @Override
     public Optional<FlightDto> bookFlight(String flightId, Long userId) {
         return repository.findById(flightId).map(f -> {
-            //Primero verifica si existe, si es asi, verifica que este disponible
-            if (f.getStatus() != Status.AVAILABLE || f.getUser() != null) {
-                throw new IllegalStateException("El vuelo ya no está disponible.");
+
+            //verifica si existe el usuario
+            if(em.find(User.class, userId) == null){
+                throw new UserNotFoundException(userId);
             }
-            f.setUser(em.getReference(User.class, userId)); //Busca solo el usuario por el id sin el resto de los datos
+
+            //Verifica si el vuelo sigue disponible
+            if (f.getStatus() != Status.AVAILABLE) {
+                throw new FlightNotAvailableException(flightId);
+            }
+
+            //Se le asigna el usuario al vuelo
+            //Uso entity manager porque es mas practico para asignar una fk (no trae toda la entidad)
+            f.setUser(em.getReference(User.class, userId));
             f.setStatus(Status.SOLD); 
 
-            //Guardo el vuelo
+            //Guarda el vuelo
             Flight savedFlight = repository.save(f);
 
             return FlightDto.toDto(savedFlight);

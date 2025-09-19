@@ -79,4 +79,12 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(400).body(errorResponse);
     }
 
+    // Excepcion que ocurre cuando el vuelo ya esta vendido y se le quiere asignar a otro usuario
+    @ExceptionHandler(FlightNotAvailableException.class)
+    public ResponseEntity<ErrorResponse> flightNotAvailable(FlightNotAvailableException e) {
+        ErrorResponse errorResponse = new ErrorResponse(400, "Bad request", e.getMessage());
+
+        return ResponseEntity.status(400).body(errorResponse);
+    }
+
 }
