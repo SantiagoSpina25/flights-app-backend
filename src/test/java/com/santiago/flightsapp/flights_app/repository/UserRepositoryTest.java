@@ -2,7 +2,6 @@ package com.santiago.flightsapp.flights_app.repository;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Optional;
@@ -15,7 +14,6 @@ import org.springframework.test.context.ActiveProfiles;
 
 import com.santiago.flightsapp.flights_app.MockData;
 import com.santiago.flightsapp.flights_app.entities.User;
-import com.santiago.flightsapp.flights_app.exceptions.UserNotFoundException;
 import com.santiago.flightsapp.flights_app.repositories.UserRepository;
 
 @DataJpaTest
