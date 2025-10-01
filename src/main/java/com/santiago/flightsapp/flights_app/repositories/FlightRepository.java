@@ -6,6 +6,6 @@ import org.springframework.stereotype.Repository;
 import com.santiago.flightsapp.flights_app.entities.Flight;
 
 @Repository
-public interface FligthRepository extends CrudRepository<Flight, String> {
+public interface FlightRepository extends CrudRepository<Flight, String> {
 
 }

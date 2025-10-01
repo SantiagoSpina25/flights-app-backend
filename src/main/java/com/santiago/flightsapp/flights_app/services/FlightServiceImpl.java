@@ -16,7 +16,7 @@ import com.santiago.flightsapp.flights_app.exceptions.AirlineNotFoundException;
 import com.santiago.flightsapp.flights_app.exceptions.FlightNotAvailableException;
 import com.santiago.flightsapp.flights_app.exceptions.UserNotFoundException;
 import com.santiago.flightsapp.flights_app.repositories.AirlineRepository;
-import com.santiago.flightsapp.flights_app.repositories.FligthRepository;
+import com.santiago.flightsapp.flights_app.repositories.FlightRepository;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -25,7 +25,7 @@ import jakarta.persistence.PersistenceContext;
 public class FlightServiceImpl implements FlightService {
 
     @Autowired
-    private FligthRepository repository;
+    private FlightRepository repository;
 
     @Autowired
     private AirlineRepository airlineRepository;
