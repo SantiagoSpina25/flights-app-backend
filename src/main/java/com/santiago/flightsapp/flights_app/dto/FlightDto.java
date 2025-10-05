@@ -4,7 +4,6 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 
 import com.santiago.flightsapp.flights_app.entities.Flight;
-import com.santiago.flightsapp.flights_app.entities.Status;
 
 //Record para Dto de flight (inmutable, genera constructor y getters automaticamente)
 public record FlightDto(
@@ -13,7 +12,6 @@ public record FlightDto(
         LocalTime hour,
         String origin,
         String destination,
-        Status status,
         String airlineName
 
 ) {
@@ -28,7 +26,6 @@ public record FlightDto(
                 f.getHour(),
                 f.getOrigin(),
                 f.getDestination(),
-                f.getStatus(),
                 f.getAirline() != null ? f.getAirline().getName() : null);
     }
 }

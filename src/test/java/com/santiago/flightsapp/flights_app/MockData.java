@@ -27,7 +27,6 @@ public class MockData {
         f.setOrigin(origin);
         f.setDestination(destination);
         f.setAirline(airline);
-        f.setUser(user);
         return f;
     }
 }

@@ -37,4 +37,9 @@ public class Seat {
     @ManyToOne
     @JoinColumn(name = "flight_id")
     private Flight flight;
+
+    @ManyToOne(optional = true) // Opcional porque un asiento puede no tener un usuario asociado
+    @JoinColumn(name = "user_id", nullable = true)
+    private User user;
+
 }

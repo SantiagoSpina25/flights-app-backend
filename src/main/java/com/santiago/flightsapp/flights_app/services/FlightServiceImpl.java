@@ -10,11 +10,7 @@ import com.santiago.flightsapp.flights_app.dto.FlightCreateRequestDto;
 import com.santiago.flightsapp.flights_app.dto.FlightDto;
 import com.santiago.flightsapp.flights_app.entities.Airline;
 import com.santiago.flightsapp.flights_app.entities.Flight;
-import com.santiago.flightsapp.flights_app.entities.Status;
-import com.santiago.flightsapp.flights_app.entities.User;
 import com.santiago.flightsapp.flights_app.exceptions.AirlineNotFoundException;
-import com.santiago.flightsapp.flights_app.exceptions.FlightNotAvailableException;
-import com.santiago.flightsapp.flights_app.exceptions.UserNotFoundException;
 import com.santiago.flightsapp.flights_app.repositories.AirlineRepository;
 import com.santiago.flightsapp.flights_app.repositories.FlightRepository;
 
@@ -56,7 +52,6 @@ public class FlightServiceImpl implements FlightService {
         newFlight.setDestination(flight.getDestination());
         newFlight.setDate(flight.getDate());
         newFlight.setHour(flight.getHour());
-        newFlight.setStatus(flight.getStatus());
         newFlight.setAirline(airline);
 
         return FlightDto.toDto(repository.save(newFlight));
@@ -69,9 +64,7 @@ public class FlightServiceImpl implements FlightService {
             existingFlight.setDestination(flight.getDestination());
             existingFlight.setDate(flight.getDate());
             existingFlight.setHour(flight.getHour());
-            existingFlight.setStatus(flight.getStatus());
             existingFlight.setAirline(flight.getAirline());
-            existingFlight.setUser(flight.getUser());
 
             Flight saved = repository.save(existingFlight);
             return FlightDto.toDto(saved);
@@ -92,28 +85,29 @@ public class FlightServiceImpl implements FlightService {
     //METODO PARA RESERVAR UN VUELO
     @Override
     public Optional<FlightDto> bookFlight(String flightId, Long userId) {
-        return repository.findById(flightId).map(f -> {
+        return null;
+        // return repository.findById(flightId).map(f -> {
 
-            //verifica si existe el usuario
-            if(em.find(User.class, userId) == null){
-                throw new UserNotFoundException(userId);
-            }
+        //     //verifica si existe el usuario
+        //     if(em.find(User.class, userId) == null){
+        //         throw new UserNotFoundException(userId);
+        //     }
 
-            //Verifica si el vuelo sigue disponible
-            if (f.getStatus() != Status.AVAILABLE) {
-                throw new FlightNotAvailableException(flightId);
-            }
+        //     //Verifica si el vuelo sigue disponible
+        //     if (f.getStatus() != Status.AVAILABLE) {
+        //         throw new FlightNotAvailableException(flightId);
+        //     }
 
-            //Se le asigna el usuario al vuelo
-            //Uso entity manager porque es mas practico para asignar una fk (no trae toda la entidad)
-            f.setUser(em.getReference(User.class, userId));
-            f.setStatus(Status.SOLD); 
+        //     //Se le asigna el usuario al vuelo
+        //     //Uso entity manager porque es mas practico para asignar una fk (no trae toda la entidad)
+        //     f.setUser(em.getReference(User.class, userId));
+        //     f.setStatus(Status.SOLD); 
 
-            //Guarda el vuelo
-            Flight savedFlight = repository.save(f);
+        //     //Guarda el vuelo
+        //     Flight savedFlight = repository.save(f);
 
-            return FlightDto.toDto(savedFlight);
-        });
+        //     return FlightDto.toDto(savedFlight);
+        // });
     }
 
 }
