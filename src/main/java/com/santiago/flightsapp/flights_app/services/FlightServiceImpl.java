@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.santiago.flightsapp.flights_app.dto.FlightCreateRequestDto;
 import com.santiago.flightsapp.flights_app.dto.FlightDto;
@@ -14,8 +15,6 @@ import com.santiago.flightsapp.flights_app.exceptions.notFound.AirlineNotFoundEx
 import com.santiago.flightsapp.flights_app.repositories.AirlineRepository;
 import com.santiago.flightsapp.flights_app.repositories.FlightRepository;
 
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
 
 @Service
 public class FlightServiceImpl implements FlightService {
@@ -26,20 +25,21 @@ public class FlightServiceImpl implements FlightService {
     @Autowired
     private AirlineRepository airlineRepository;
 
-    @PersistenceContext
-    private EntityManager em;
 
+    @Transactional(readOnly = true)
     @Override
     public List<FlightDto> findAll() {
         List<Flight> flightlList = (List<Flight>) repository.findAll();
         return flightlList.stream().map(f -> FlightDto.toDto(f)).toList();
     }
 
+    @Transactional(readOnly = true)
     @Override
     public Optional<FlightDto> findById(String id) {
         return repository.findById(id).map(f -> FlightDto.toDto(f));
     }
 
+    @Transactional
     @Override
     public FlightDto save(FlightCreateRequestDto flight) {
 
@@ -57,6 +57,7 @@ public class FlightServiceImpl implements FlightService {
         return FlightDto.toDto(repository.save(newFlight));
     }
 
+    @Transactional
     @Override
     public Optional<FlightDto> update(String id, Flight flight) {
         return repository.findById(id).map(existingFlight -> {
@@ -71,6 +72,7 @@ public class FlightServiceImpl implements FlightService {
         });
     }
 
+    @Transactional
     @Override
     public Optional<FlightDto> delete(String id) {
         Optional<FlightDto> flightOptional = repository.findById(id).map(f-> FlightDto.toDto(f));
@@ -83,31 +85,31 @@ public class FlightServiceImpl implements FlightService {
     }
 
     //METODO PARA RESERVAR UN VUELO
-    @Override
-    public Optional<FlightDto> bookFlight(String flightId, Long userId) {
-        return null;
-        // return repository.findById(flightId).map(f -> {
+    // @Override
+    // public Optional<FlightDto> bookFlight(String flightId, Long userId) {
+    //     return null;
+    //     // return repository.findById(flightId).map(f -> {
 
-        //     //verifica si existe el usuario
-        //     if(em.find(User.class, userId) == null){
-        //         throw new UserNotFoundException(userId);
-        //     }
+    //     //     //verifica si existe el usuario
+    //     //     if(em.find(User.class, userId) == null){
+    //     //         throw new UserNotFoundException(userId);
+    //     //     }
 
-        //     //Verifica si el vuelo sigue disponible
-        //     if (f.getStatus() != Status.AVAILABLE) {
-        //         throw new FlightNotAvailableException(flightId);
-        //     }
+    //     //     //Verifica si el vuelo sigue disponible
+    //     //     if (f.getStatus() != Status.AVAILABLE) {
+    //     //         throw new FlightNotAvailableException(flightId);
+    //     //     }
 
-        //     //Se le asigna el usuario al vuelo
-        //     //Uso entity manager porque es mas practico para asignar una fk (no trae toda la entidad)
-        //     f.setUser(em.getReference(User.class, userId));
-        //     f.setStatus(Status.SOLD); 
+    //     //     //Se le asigna el usuario al vuelo
+    //     //     //Uso entity manager porque es mas practico para asignar una fk (no trae toda la entidad)
+    //     //     f.setUser(em.getReference(User.class, userId));
+    //     //     f.setStatus(Status.SOLD); 
 
-        //     //Guarda el vuelo
-        //     Flight savedFlight = repository.save(f);
+    //     //     //Guarda el vuelo
+    //     //     Flight savedFlight = repository.save(f);
 
-        //     return FlightDto.toDto(savedFlight);
-        // });
-    }
+    //     //     return FlightDto.toDto(savedFlight);
+    //     // });
+    // }
 
 }

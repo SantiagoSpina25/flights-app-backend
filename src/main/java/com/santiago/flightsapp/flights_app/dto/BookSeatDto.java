@@ -1,7 +1,7 @@
 package com.santiago.flightsapp.flights_app.dto;
 
 //DTO PARA RESERVAR UN VUELO
-public record BookFlightDto (
-    String flightId,
+public record BookSeatDto (
+    Long seatId,
     Long userId
 ){}

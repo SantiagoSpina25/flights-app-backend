@@ -14,4 +14,6 @@ public interface SeatService{
     SeatDto save(SeatCreateRequestDto seat);
 
     Optional<SeatDto> delete(Long id);
+
+    Optional<SeatDto> bookSeat(Long seatId, Long userId);
 }

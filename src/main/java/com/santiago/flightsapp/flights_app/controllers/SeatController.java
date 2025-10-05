@@ -3,6 +3,7 @@ package com.santiago.flightsapp.flights_app.controllers;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.santiago.flightsapp.flights_app.dto.BookSeatDto;
 import com.santiago.flightsapp.flights_app.dto.SeatCreateRequestDto;
 import com.santiago.flightsapp.flights_app.dto.SeatDto;
 import com.santiago.flightsapp.flights_app.exceptions.notFound.SeatNotFoundException;
@@ -55,4 +56,10 @@ public class SeatController {
 
         return ResponseEntity.ok().body(json);
     }
+
+    @PostMapping("/book")
+    public ResponseEntity<?> bookSeat(@RequestBody BookSeatDto body) {
+        return ResponseEntity.ok(service.bookSeat(body.seatId(), body.userId()));
+    }
+    
 }

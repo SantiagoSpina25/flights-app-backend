@@ -9,7 +9,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.santiago.flightsapp.flights_app.dto.BookFlightDto;
 import com.santiago.flightsapp.flights_app.dto.FlightCreateRequestDto;
 import com.santiago.flightsapp.flights_app.dto.FlightDto;
 import com.santiago.flightsapp.flights_app.entities.Flight;
@@ -57,14 +56,8 @@ public class FlightController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> delete(@PathVariable String id){
-        return ResponseEntity.ok(service.delete(id).orElseThrow(()-> new FlightNotFoundException(id)));
+    public ResponseEntity<?> delete(@PathVariable String id) {
+        return ResponseEntity.ok(service.delete(id).orElseThrow(() -> new FlightNotFoundException(id)));
     }
-
-    @PostMapping("/bookFlight")
-    public ResponseEntity<?> bookFlight(@RequestBody BookFlightDto body) {
-        return ResponseEntity.ok(service.bookFlight(body.flightId(), body.userId()).orElseThrow(()-> new FlightNotFoundException(body.flightId())));
-    }
-    
 
 }
