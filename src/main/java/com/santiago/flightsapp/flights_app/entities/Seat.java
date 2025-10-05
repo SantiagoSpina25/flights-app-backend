@@ -35,7 +35,7 @@ public class Seat {
     private Status status = Status.AVAILABLE; // Por defecto disponible
 
     @ManyToOne
-    @JoinColumn(name = "flight_id")
+    @JoinColumn(name = "flight_id", nullable = false)
     private Flight flight;
 
     @ManyToOne(optional = true) // Opcional porque un asiento puede no tener un usuario asociado
