@@ -1,4 +1,4 @@
-package com.santiago.flightsapp.flights_app.exceptions;
+package com.santiago.flightsapp.flights_app.exceptions.notFound;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;

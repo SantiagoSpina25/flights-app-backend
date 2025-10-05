@@ -13,7 +13,7 @@ import com.santiago.flightsapp.flights_app.dto.BookFlightDto;
 import com.santiago.flightsapp.flights_app.dto.FlightCreateRequestDto;
 import com.santiago.flightsapp.flights_app.dto.FlightDto;
 import com.santiago.flightsapp.flights_app.entities.Flight;
-import com.santiago.flightsapp.flights_app.exceptions.FlightNotFoundException;
+import com.santiago.flightsapp.flights_app.exceptions.notFound.FlightNotFoundException;
 import com.santiago.flightsapp.flights_app.services.FlightService;
 
 import jakarta.validation.Valid;

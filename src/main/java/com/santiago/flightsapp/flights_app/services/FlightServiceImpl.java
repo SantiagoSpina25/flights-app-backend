@@ -10,7 +10,7 @@ import com.santiago.flightsapp.flights_app.dto.FlightCreateRequestDto;
 import com.santiago.flightsapp.flights_app.dto.FlightDto;
 import com.santiago.flightsapp.flights_app.entities.Airline;
 import com.santiago.flightsapp.flights_app.entities.Flight;
-import com.santiago.flightsapp.flights_app.exceptions.AirlineNotFoundException;
+import com.santiago.flightsapp.flights_app.exceptions.notFound.AirlineNotFoundException;
 import com.santiago.flightsapp.flights_app.repositories.AirlineRepository;
 import com.santiago.flightsapp.flights_app.repositories.FlightRepository;
 

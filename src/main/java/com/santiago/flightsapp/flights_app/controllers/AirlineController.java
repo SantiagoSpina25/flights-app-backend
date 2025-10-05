@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.santiago.flightsapp.flights_app.dto.AirlineDto;
 import com.santiago.flightsapp.flights_app.entities.Airline;
-import com.santiago.flightsapp.flights_app.exceptions.AirlineNotFoundException;
+import com.santiago.flightsapp.flights_app.exceptions.notFound.AirlineNotFoundException;
 import com.santiago.flightsapp.flights_app.services.AirlineService;
 
 import jakarta.validation.Valid;

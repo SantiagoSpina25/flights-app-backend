@@ -12,12 +12,17 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
 
+import com.santiago.flightsapp.flights_app.exceptions.notFound.AirlineNotFoundException;
+import com.santiago.flightsapp.flights_app.exceptions.notFound.FlightNotFoundException;
+import com.santiago.flightsapp.flights_app.exceptions.notFound.SeatNotFoundException;
+import com.santiago.flightsapp.flights_app.exceptions.notFound.UserNotFoundException;
+
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
     // Excepcion que ocurre cuando no se encuentra un usuario con el id pasado por
     // parametros
-    @ExceptionHandler({ UserNotFoundException.class, FlightNotFoundException.class, AirlineNotFoundException.class })
+    @ExceptionHandler({ UserNotFoundException.class, FlightNotFoundException.class, AirlineNotFoundException.class, SeatNotFoundException.class })
     public ResponseEntity<ErrorResponse> idNotfound(Exception e) {
         ErrorResponse errorResponse = new ErrorResponse(404, "Error id no encontrado", e.getMessage());
 
