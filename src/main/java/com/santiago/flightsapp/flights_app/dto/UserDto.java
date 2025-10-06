@@ -2,22 +2,32 @@ package com.santiago.flightsapp.flights_app.dto;
 
 import java.util.List;
 
+import com.santiago.flightsapp.flights_app.entities.Flight;
 import com.santiago.flightsapp.flights_app.entities.User;
 
 public record UserDto(
         Long id,
         String username,
         String password,
-        List<SeatDto> seats) {
+        List<TicketDto> tickets) {
 
+    //Metodo para convertir a DTO
     public static UserDto toDto(User user) {
 
-        List<SeatDto> seats = user.getSeats().stream().map(s -> SeatDto.toDto(s)).toList();
+        //Creo la lista de tickets del usuario
+        //Obtiene informacion del asiento y del vuelo
+        List<TicketDto> tickets = user.getSeats().stream().map(s -> {
+            Flight flight = s.getFlight();
+            return new TicketDto(
+                    flight.getId(),
+                    flight.getAirline().getName(), flight.getDate(), flight.getHour(), flight.getOrigin(),
+                    flight.getDestination(), s.getClassType(), s.getNumber());
+        }).toList();
 
         return new UserDto(
                 user.getId(),
                 user.getUsername(),
                 user.getPassword(),
-                seats);
+                tickets);
     }
 }

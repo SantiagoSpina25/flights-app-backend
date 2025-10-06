@@ -30,6 +30,7 @@ public class GlobalExceptionHandler {
     }
 
     // Excepcion que ocurre cuando se pasa un parametro con un tipo erroneo
+    @SuppressWarnings("null")
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
     public ResponseEntity<ErrorResponse> argumentMismatch(MethodArgumentTypeMismatchException e) {
         String message = String.format("El parametro '%s' con el valor '%s' no es valido. Se esperaba un tipo '%s'",
