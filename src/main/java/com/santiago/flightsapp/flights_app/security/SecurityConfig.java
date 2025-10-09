@@ -36,7 +36,7 @@ public class SecurityConfig {
         return http
                 .authorizeHttpRequests(
                         (auth) -> auth.requestMatchers(HttpMethod.POST, "/api/users/register").permitAll()
-                                .anyRequest().authenticated())
+                                .anyRequest().permitAll())
                 .csrf(config -> config.disable())
                 .addFilter(new JwtAuthenticationFilter(authenticationManager()))
                 .addFilter(new JwtValidationFilter(authenticationManager()))
