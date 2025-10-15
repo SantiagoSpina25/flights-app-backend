@@ -44,7 +44,8 @@ public class SecurityConfig {
         return http
                 .authorizeHttpRequests(
                         (auth) -> auth.requestMatchers(HttpMethod.POST, "/api/users/register").permitAll()
-                                .anyRequest().permitAll())
+                                .requestMatchers(HttpMethod.POST, "/login").permitAll()
+                                .anyRequest().authenticated())
                 .csrf(config -> config.disable())
                 .cors(cors -> cors.configurationSource(configurationSource()))
                 .addFilter(new JwtAuthenticationFilter(authenticationManager()))
