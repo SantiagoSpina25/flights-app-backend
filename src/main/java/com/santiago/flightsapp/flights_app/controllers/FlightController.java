@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.santiago.flightsapp.flights_app.dto.FlightCreateRequestDto;
 import com.santiago.flightsapp.flights_app.dto.FlightDto;
+import com.santiago.flightsapp.flights_app.dto.SeatsForFlightCreateDto;
 import com.santiago.flightsapp.flights_app.entities.Flight;
 import com.santiago.flightsapp.flights_app.exceptions.notFound.FlightNotFoundException;
 import com.santiago.flightsapp.flights_app.services.FlightService;
@@ -60,6 +61,12 @@ public class FlightController {
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable String id) {
         return ResponseEntity.ok(service.delete(id).orElseThrow(() -> new FlightNotFoundException(id)));
+    }
+
+    @PostMapping("/createSeats")
+    public ResponseEntity<?> createSeats(@Valid @RequestBody SeatsForFlightCreateDto body) {
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(service.createSeats(body.flightId(), body.numberOfSeats()));
     }
 
 }

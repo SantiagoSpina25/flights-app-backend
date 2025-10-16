@@ -1,20 +1,25 @@
 package com.santiago.flightsapp.flights_app.services;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 
+import com.santiago.flightsapp.flights_app.repositories.SeatRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.santiago.flightsapp.flights_app.dto.FlightCreateRequestDto;
 import com.santiago.flightsapp.flights_app.dto.FlightDto;
+import com.santiago.flightsapp.flights_app.dto.SeatDto;
 import com.santiago.flightsapp.flights_app.entities.Airline;
 import com.santiago.flightsapp.flights_app.entities.Flight;
+import com.santiago.flightsapp.flights_app.entities.Seat;
 import com.santiago.flightsapp.flights_app.exceptions.notFound.AirlineNotFoundException;
+import com.santiago.flightsapp.flights_app.exceptions.notFound.FlightNotFoundException;
 import com.santiago.flightsapp.flights_app.repositories.AirlineRepository;
 import com.santiago.flightsapp.flights_app.repositories.FlightRepository;
-
 
 @Service
 public class FlightServiceImpl implements FlightService {
@@ -25,6 +30,8 @@ public class FlightServiceImpl implements FlightService {
     @Autowired
     private AirlineRepository airlineRepository;
 
+    @Autowired
+    private SeatRepository seatRepository;
 
     @Transactional(readOnly = true)
     @Override
@@ -43,8 +50,9 @@ public class FlightServiceImpl implements FlightService {
     @Override
     public FlightDto save(FlightCreateRequestDto flight) {
 
-        //Compruebo primero que el id de la aerolinea introducida exista
-        Airline airline = airlineRepository.findById(flight.getAirlineId()).orElseThrow(()-> new AirlineNotFoundException(flight.getAirlineId()));
+        // Compruebo primero que el id de la aerolinea introducida exista
+        Airline airline = airlineRepository.findById(flight.getAirlineId())
+                .orElseThrow(() -> new AirlineNotFoundException(flight.getAirlineId()));
 
         Flight newFlight = new Flight();
         newFlight.setId(flight.getId());
@@ -75,7 +83,7 @@ public class FlightServiceImpl implements FlightService {
     @Transactional
     @Override
     public Optional<FlightDto> delete(String id) {
-        Optional<FlightDto> flightOptional = repository.findById(id).map(f-> FlightDto.toDto(f));
+        Optional<FlightDto> flightOptional = repository.findById(id).map(f -> FlightDto.toDto(f));
 
         if (flightOptional.isPresent()) {
             repository.deleteById(id);
@@ -84,32 +92,34 @@ public class FlightServiceImpl implements FlightService {
         return flightOptional;
     }
 
-    //METODO PARA RESERVAR UN VUELO
-    // @Override
-    // public Optional<FlightDto> bookFlight(String flightId, Long userId) {
-    //     return null;
-    //     // return repository.findById(flightId).map(f -> {
+    @Override
+    public Optional<List<SeatDto>> createSeats(String flightId, int numberOfSeats) {
 
-    //     //     //verifica si existe el usuario
-    //     //     if(em.find(User.class, userId) == null){
-    //     //         throw new UserNotFoundException(userId);
-    //     //     }
+        List<Seat> newSeatList = new ArrayList<>();
 
-    //     //     //Verifica si el vuelo sigue disponible
-    //     //     if (f.getStatus() != Status.AVAILABLE) {
-    //     //         throw new FlightNotAvailableException(flightId);
-    //     //     }
+        // Verifica que exista el vuelo
+        Flight flight = repository.findById(flightId)
+                .orElseThrow(() -> new FlightNotFoundException(flightId));
 
-    //     //     //Se le asigna el usuario al vuelo
-    //     //     //Uso entity manager porque es mas practico para asignar una fk (no trae toda la entidad)
-    //     //     f.setUser(em.getReference(User.class, userId));
-    //     //     f.setStatus(Status.SOLD); 
+        if (numberOfSeats > 10) {
+            // Poner un limite
+        }
 
-    //     //     //Guarda el vuelo
-    //     //     Flight savedFlight = repository.save(f);
+        Random random = new Random();
 
-    //     //     return FlightDto.toDto(savedFlight);
-    //     // });
-    // }
+        for (int i = 0; i < numberOfSeats; i++) {
+            Seat newSeat = new Seat();
+            char seatLetter = (char) ('A' + (i % 6)); // columnas A-F
+            int rowNumber = random.nextInt(40) + 1;
+            newSeat.setNumber(rowNumber + String.valueOf(seatLetter));
+            newSeat.setFlight(flight);
+            newSeatList.add(newSeat);
+        }
+
+        seatRepository.saveAll(newSeatList);
+
+        return Optional.of(newSeatList.stream().map((s) -> SeatDto.toDto(s)).toList());
+
+    }
 
 }

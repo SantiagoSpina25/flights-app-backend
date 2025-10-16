@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import com.santiago.flightsapp.flights_app.dto.FlightCreateRequestDto;
 import com.santiago.flightsapp.flights_app.dto.FlightDto;
+import com.santiago.flightsapp.flights_app.dto.SeatDto;
 import com.santiago.flightsapp.flights_app.entities.Flight;
 
 public interface FlightService {
@@ -17,4 +18,6 @@ public interface FlightService {
     Optional<FlightDto> update(String id, Flight flight);
 
     Optional<FlightDto> delete(String id);
+
+    Optional<List<SeatDto>> createSeats(String flightId, int numberOfSeats);
 }
