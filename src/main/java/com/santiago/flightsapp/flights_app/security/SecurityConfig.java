@@ -19,15 +19,21 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
-
+import com.santiago.flightsapp.flights_app.repositories.UserRepository;
 import com.santiago.flightsapp.flights_app.security.jwt.JwtAuthenticationFilter;
 import com.santiago.flightsapp.flights_app.security.jwt.JwtValidationFilter;
 
 @Configuration
 public class SecurityConfig {
 
+    private final UserRepository userRepository;
+
     @Autowired
     private AuthenticationConfiguration authenticationConfiguration;
+
+    SecurityConfig(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
     @Bean
     AuthenticationManager authenticationManager() throws Exception {
@@ -48,7 +54,7 @@ public class SecurityConfig {
                                 .anyRequest().authenticated())
                 .csrf(config -> config.disable())
                 .cors(cors -> cors.configurationSource(configurationSource()))
-                .addFilter(new JwtAuthenticationFilter(authenticationManager()))
+                .addFilter(new JwtAuthenticationFilter(authenticationManager(), userRepository))
                 .addFilter(new JwtValidationFilter(authenticationManager()))
                 .sessionManagement(managment -> managment.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .build();

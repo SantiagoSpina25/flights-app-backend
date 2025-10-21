@@ -17,6 +17,7 @@ import com.fasterxml.jackson.core.exc.StreamReadException;
 import com.fasterxml.jackson.databind.DatabindException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.santiago.flightsapp.flights_app.entities.User;
+import com.santiago.flightsapp.flights_app.repositories.UserRepository;
 
 import io.jsonwebtoken.Jwts;
 import jakarta.servlet.FilterChain;
@@ -27,9 +28,11 @@ import jakarta.servlet.http.HttpServletResponse;
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
     private AuthenticationManager authenticationManager;
+    private final UserRepository userRepository;
 
-    public JwtAuthenticationFilter(AuthenticationManager authenticationManager) {
+    public JwtAuthenticationFilter(AuthenticationManager authenticationManager, UserRepository userRepository) {
         this.authenticationManager = authenticationManager;
+        this.userRepository = userRepository;
     }
 
     // Metodo que obtiene los datos del usuario y crea la autenticacion
@@ -76,11 +79,14 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                 .getPrincipal();
         String username = user.getUsername();
 
+         User userEntity = userRepository.findByUsername(username)
+            .orElseThrow(() -> new RuntimeException("Usuario no encontrado después de autenticar"));
+
         // Firma el token
         String token = Jwts.builder()
                 .subject(username) // Agrega el usuario
                 .expiration(new Date(System.currentTimeMillis() + 3600000)) // Agrega la fecha de expiracion (la fecha
-                                                                            // actual mas una hora)
+                .claim("id", userEntity.getId())                                                            // actual mas una hora)
                 .issuedAt(new Date()) // Fecha de creacion
                 .signWith(SECRET_KEY) // Firma con la secret key
                 .compact();
