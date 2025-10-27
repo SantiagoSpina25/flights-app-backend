@@ -3,6 +3,7 @@ package com.santiago.flightsapp.flights_app.security.jwt;
 import static com.santiago.flightsapp.flights_app.security.jwt.JwtConstants.*;
 
 import java.io.IOException;
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -11,6 +12,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import com.fasterxml.jackson.core.exc.StreamReadException;
@@ -19,6 +21,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.santiago.flightsapp.flights_app.entities.User;
 import com.santiago.flightsapp.flights_app.repositories.UserRepository;
 
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -78,15 +81,21 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         org.springframework.security.core.userdetails.User user = (org.springframework.security.core.userdetails.User) authResult
                 .getPrincipal();
         String username = user.getUsername();
+        Collection<? extends GrantedAuthority> roles = authResult.getAuthorities();
 
-         User userEntity = userRepository.findByUsername(username)
-            .orElseThrow(() -> new RuntimeException("Usuario no encontrado después de autenticar"));
+        User userEntity = userRepository.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado después de autenticar"));
+
+        // Guarda los roles y el id del usuario
+        Claims claims = Jwts.claims().add("authorities", new ObjectMapper().writeValueAsString(roles))
+                .add("id", userEntity.getId())
+                .build();
 
         // Firma el token
         String token = Jwts.builder()
                 .subject(username) // Agrega el usuario
                 .expiration(new Date(System.currentTimeMillis() + 3600000)) // Agrega la fecha de expiracion (la fecha
-                .claim("id", userEntity.getId())                                                            // actual mas una hora)
+                .claims(claims) // actual mas una hora)
                 .issuedAt(new Date()) // Fecha de creacion
                 .signWith(SECRET_KEY) // Firma con la secret key
                 .compact();

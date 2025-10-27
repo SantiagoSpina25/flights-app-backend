@@ -1,5 +1,6 @@
 package com.santiago.flightsapp.flights_app.services;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -9,14 +10,19 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.santiago.flightsapp.flights_app.dto.UserDto;
+import com.santiago.flightsapp.flights_app.entities.Role;
 import com.santiago.flightsapp.flights_app.entities.User;
+import com.santiago.flightsapp.flights_app.repositories.RoleRepository;
 import com.santiago.flightsapp.flights_app.repositories.UserRepository;
 
 @Service
-public class UserServiceImpl implements UserService{
+public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserRepository repository;
+
+    @Autowired
+    private RoleRepository roleRepository;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -25,19 +31,31 @@ public class UserServiceImpl implements UserService{
     @Override
     public List<UserDto> findAll() {
         List<User> users = (List<User>) repository.findAll();
-        return users.stream().map(u->UserDto.toDto(u)).toList();
+        return users.stream().map(u -> UserDto.toDto(u)).toList();
     }
 
     @Transactional(readOnly = true)
     @Override
     public Optional<UserDto> findById(Long id) {
-        return repository.findById(id).map(u->UserDto.toDto(u));
+        return repository.findById(id).map(u -> UserDto.toDto(u));
     }
 
     @Transactional
     @Override
     public UserDto save(User user) {
-        //Codifica la contraseña
+
+        Optional<Role> optionalRoleUser = roleRepository.findByName("ROLE_USER");
+        List<Role> roles = new ArrayList<>();
+        optionalRoleUser.ifPresent(role -> roles.add(role)); // AGREGA EL ROL DE USUARIO
+
+        if (user.isAdmin()) {
+            Optional<Role> optionalRoleAdmin = roleRepository.findByName("ROLE_ADMIN");
+            optionalRoleAdmin.ifPresent(role -> roles.add(role)); // AGREGA EL ROL DE ADMIN SI ES CORRECTO
+        }
+
+        user.setRoles(roles);
+
+        // Codifica la contraseña
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         return UserDto.toDto(repository.save(user));
     }
@@ -46,15 +64,13 @@ public class UserServiceImpl implements UserService{
     @Override
     public Optional<UserDto> delete(Long id) {
 
-        Optional<UserDto> userOptional = repository.findById(id).map(u->UserDto.toDto(u));
+        Optional<UserDto> userOptional = repository.findById(id).map(u -> UserDto.toDto(u));
 
-        if(userOptional.isPresent()){
+        if (userOptional.isPresent()) {
             repository.deleteById(id);
         }
-        
+
         return userOptional;
     }
 
-    
-    
 }
