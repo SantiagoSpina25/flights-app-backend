@@ -23,7 +23,7 @@ public class Seat {
     private Long id;
 
     @NotBlank
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private String number;
 
     @Enumerated(EnumType.STRING)

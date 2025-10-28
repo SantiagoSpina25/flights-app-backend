@@ -14,6 +14,7 @@ import com.santiago.flightsapp.flights_app.dto.FlightCreateRequestDto;
 import com.santiago.flightsapp.flights_app.dto.FlightDto;
 import com.santiago.flightsapp.flights_app.dto.SeatDto;
 import com.santiago.flightsapp.flights_app.entities.Airline;
+import com.santiago.flightsapp.flights_app.entities.ClassType;
 import com.santiago.flightsapp.flights_app.entities.Flight;
 import com.santiago.flightsapp.flights_app.entities.Seat;
 import com.santiago.flightsapp.flights_app.exceptions.notFound.AirlineNotFoundException;
@@ -96,6 +97,7 @@ public class FlightServiceImpl implements FlightService {
     public Optional<List<SeatDto>> createSeats(String flightId, int numberOfSeats) {
 
         List<Seat> newSeatList = new ArrayList<>();
+        List<ClassType> classTypes = new ArrayList<>(List.of(ClassType.ECONOMY, ClassType.BUSINESS, ClassType.FIRST_CLASS));
 
         // Verifica que exista el vuelo
         Flight flight = repository.findById(flightId)
@@ -112,6 +114,7 @@ public class FlightServiceImpl implements FlightService {
             char seatLetter = (char) ('A' + (i % 6)); // columnas A-F
             int rowNumber = random.nextInt(40) + 1;
             newSeat.setNumber(rowNumber + String.valueOf(seatLetter));
+            newSeat.setClassType(classTypes.get(random.nextInt(3)));
             newSeat.setFlight(flight);
             newSeatList.add(newSeat);
         }
