@@ -17,7 +17,7 @@ import lombok.Data;
 @Table(name = "seats")
 @Data
 public class Seat {
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -28,11 +28,14 @@ public class Seat {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private ClassType classType = ClassType.ECONOMY; //Por defecto Economy
+    private ClassType classType = ClassType.ECONOMY; // Por defecto Economy
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private Status status = Status.AVAILABLE; // Por defecto disponible
+
+    @Column(nullable = false)
+    private double price= 1000;
 
     @ManyToOne
     @JoinColumn(name = "flight_id", nullable = false)
@@ -41,5 +44,29 @@ public class Seat {
     @ManyToOne(optional = true) // Opcional porque un asiento puede no tener un usuario asociado
     @JoinColumn(name = "user_id", nullable = true)
     private User user;
+
+    // Funcion para actualizar precio segun la clase
+    public void updatePriceByClassType() {
+        double basePrice = 1000;
+
+        switch (this.classType) {
+            case ECONOMY:
+                this.price = basePrice;
+                break;
+            case BUSINESS:
+                this.price = basePrice * 1.70;
+                break;
+            case FIRST_CLASS:
+                this.price = basePrice * 2.20;
+                break;
+            default:
+                this.price = basePrice;
+        }
+    }
+
+    public void setClassType(ClassType classType) {
+        this.classType = classType;
+        updatePriceByClassType();
+    }
 
 }

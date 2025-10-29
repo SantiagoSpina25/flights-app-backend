@@ -9,6 +9,7 @@ public record SeatDto(
     String number,
     Status status,
     ClassType classType,
+    double price,
     String flightId
 ) {
     // Metodo que convierte Seat en SeatDto -> Le agrega el id del
@@ -20,6 +21,7 @@ public record SeatDto(
                 s.getNumber(),
                 s.getStatus(),
                 s.getClassType(),
+                s.getPrice(),
                 s.getFlight() != null ? s.getFlight().getId() : null);
     }
 }
