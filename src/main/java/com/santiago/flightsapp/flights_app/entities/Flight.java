@@ -1,5 +1,6 @@
 package com.santiago.flightsapp.flights_app.entities;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
@@ -39,6 +40,9 @@ public class Flight {
 
     @NotNull
     private LocalTime hour = LocalTime.now().truncatedTo(ChronoUnit.SECONDS); // Por defecto la hora actual (chronoUnit corta los milisegundos)
+
+    @Column(name = "distance_km", precision = 10, scale = 2)
+    private BigDecimal distanceKm;
 
     @ManyToOne
     @JoinColumn(name = "airline_id", nullable = false)

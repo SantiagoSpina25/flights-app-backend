@@ -1,11 +1,15 @@
 package com.santiago.flightsapp.flights_app.services;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 
 import com.santiago.flightsapp.flights_app.repositories.SeatRepository;
+import com.santiago.flightsapp.flights_app.utils.GeoUtils;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -66,7 +70,7 @@ public class FlightServiceImpl implements FlightService {
                 .orElseThrow(() -> new AirportNotFoundException(flight.getOriginAirportId()));
 
         // Compruebo primero que el id del aeropuerto de destino introducida exista
-         Airport destinationAirport = airportRepository.findById(flight.getDestinationAirportId())
+        Airport destinationAirport = airportRepository.findById(flight.getDestinationAirportId())
                 .orElseThrow(() -> new AirportNotFoundException(flight.getDestinationAirportId()));
 
         Flight newFlight = new Flight();
@@ -76,6 +80,18 @@ public class FlightServiceImpl implements FlightService {
         newFlight.setDate(flight.getDate());
         newFlight.setHour(flight.getHour());
         newFlight.setAirline(airline);
+
+        // ---- CALCULAR DISTANCIA ----
+        double lat1 = originAirport.getLatitude();
+        double lon1 = originAirport.getLongitude();
+        double lat2 = destinationAirport.getLatitude();
+        double lon2 = destinationAirport.getLongitude();
+        double distanceKm = GeoUtils.haversineDistanceKm(lat1, lon1, lat2, lon2);
+        
+        //Redonde en BigDecimal
+        BigDecimal distance = BigDecimal.valueOf(distanceKm).setScale(2, RoundingMode.HALF_UP);
+
+        newFlight.setDistanceKm(distance);
 
         return FlightDto.toDto(repository.save(newFlight));
     }

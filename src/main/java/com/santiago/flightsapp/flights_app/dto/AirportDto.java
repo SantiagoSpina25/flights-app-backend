@@ -5,6 +5,8 @@ import com.santiago.flightsapp.flights_app.entities.Airport;
 public record AirportDto(
         Long id,
         String name,
+        String city,
+        String iataCode,
         double latitude,
         double longitude,
         String countryName) {
@@ -13,6 +15,8 @@ public record AirportDto(
         return new AirportDto(
                 a.getId(),
                 a.getName(),
+                a.getCity(),
+                a.getIATACode(),
                 a.getLatitude(),
                 a.getLongitude(),
                 a.getCountry().getName());

@@ -1,5 +1,6 @@
 package com.santiago.flightsapp.flights_app.dto;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
@@ -13,6 +14,7 @@ public record FlightDto(
         LocalTime hour,
         String originCity,
         String destinationCity,
+        BigDecimal distanceKm,
         String airlineName,
         SeatsInfo seats) {
 
@@ -36,6 +38,7 @@ public record FlightDto(
                 f.getHour(),
                 originCityAndAirport,
                 destinationCityAndAirport,
+                f.getDistanceKm(),
                 f.getAirline() != null ? f.getAirline().getName() : null,
                 seatsInfo);
     }
