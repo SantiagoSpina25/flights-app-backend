@@ -22,8 +22,8 @@ public record UserDto(
             Flight flight = s.getFlight();
             return new TicketDto(
                     flight.getId(),
-                    flight.getAirline().getName(), flight.getDate(), flight.getHour(), flight.getOrigin(),
-                    flight.getDestination(), s.getClassType(), s.getNumber());
+                    flight.getAirline().getName(), flight.getDate(), flight.getHour(), flight.getOrigin().getCity(),
+                    flight.getDestination().getCity(), s.getClassType(), s.getNumber());
         }).toList();
 
         List<String> roleNames = user.getRoles().stream()

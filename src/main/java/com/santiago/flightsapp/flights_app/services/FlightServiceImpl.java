@@ -14,12 +14,15 @@ import com.santiago.flightsapp.flights_app.dto.FlightCreateRequestDto;
 import com.santiago.flightsapp.flights_app.dto.FlightDto;
 import com.santiago.flightsapp.flights_app.dto.SeatDto;
 import com.santiago.flightsapp.flights_app.entities.Airline;
+import com.santiago.flightsapp.flights_app.entities.Airport;
 import com.santiago.flightsapp.flights_app.entities.ClassType;
 import com.santiago.flightsapp.flights_app.entities.Flight;
 import com.santiago.flightsapp.flights_app.entities.Seat;
 import com.santiago.flightsapp.flights_app.exceptions.notFound.AirlineNotFoundException;
+import com.santiago.flightsapp.flights_app.exceptions.notFound.AirportNotFoundException;
 import com.santiago.flightsapp.flights_app.exceptions.notFound.FlightNotFoundException;
 import com.santiago.flightsapp.flights_app.repositories.AirlineRepository;
+import com.santiago.flightsapp.flights_app.repositories.AirportRepository;
 import com.santiago.flightsapp.flights_app.repositories.FlightRepository;
 
 @Service
@@ -33,6 +36,9 @@ public class FlightServiceImpl implements FlightService {
 
     @Autowired
     private SeatRepository seatRepository;
+
+    @Autowired
+    private AirportRepository airportRepository;
 
     @Transactional(readOnly = true)
     @Override
@@ -55,10 +61,18 @@ public class FlightServiceImpl implements FlightService {
         Airline airline = airlineRepository.findById(flight.getAirlineId())
                 .orElseThrow(() -> new AirlineNotFoundException(flight.getAirlineId()));
 
+        // Compruebo primero que el id del aeropuerto de origen introducida exista
+        Airport originAirport = airportRepository.findById(flight.getOriginAirportId())
+                .orElseThrow(() -> new AirportNotFoundException(flight.getOriginAirportId()));
+
+        // Compruebo primero que el id del aeropuerto de destino introducida exista
+         Airport destinationAirport = airportRepository.findById(flight.getDestinationAirportId())
+                .orElseThrow(() -> new AirportNotFoundException(flight.getDestinationAirportId()));
+
         Flight newFlight = new Flight();
         newFlight.setId(flight.getId());
-        newFlight.setOrigin(flight.getOrigin());
-        newFlight.setDestination(flight.getDestination());
+        newFlight.setOrigin(originAirport);
+        newFlight.setDestination(destinationAirport);
         newFlight.setDate(flight.getDate());
         newFlight.setHour(flight.getHour());
         newFlight.setAirline(airline);
@@ -97,7 +111,8 @@ public class FlightServiceImpl implements FlightService {
     public Optional<List<SeatDto>> createSeats(String flightId, int numberOfSeats) {
 
         List<Seat> newSeatList = new ArrayList<>();
-        List<ClassType> classTypes = new ArrayList<>(List.of(ClassType.ECONOMY, ClassType.BUSINESS, ClassType.FIRST_CLASS));
+        List<ClassType> classTypes = new ArrayList<>(
+                List.of(ClassType.ECONOMY, ClassType.BUSINESS, ClassType.FIRST_CLASS));
 
         // Verifica que exista el vuelo
         Flight flight = repository.findById(flightId)

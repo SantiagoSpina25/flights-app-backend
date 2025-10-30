@@ -11,8 +11,8 @@ public record FlightDto(
         String id,
         LocalDate date,
         LocalTime hour,
-        String origin,
-        String destination,
+        String originCity,
+        String destinationCity,
         String airlineName,
         SeatsInfo seats) {
 
@@ -31,8 +31,8 @@ public record FlightDto(
                 f.getId(),
                 f.getDate(),
                 f.getHour(),
-                f.getOrigin(),
-                f.getDestination(),
+                f.getOrigin().getCity(),
+                f.getDestination().getCity(),
                 f.getAirline() != null ? f.getAirline().getName() : null,
                 seatsInfo);
     }

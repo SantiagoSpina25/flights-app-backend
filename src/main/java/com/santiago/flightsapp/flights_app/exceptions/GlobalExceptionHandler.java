@@ -3,8 +3,10 @@ package com.santiago.flightsapp.flights_app.exceptions;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.transaction.TransactionSystemException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -17,12 +19,15 @@ import com.santiago.flightsapp.flights_app.exceptions.notFound.FlightNotFoundExc
 import com.santiago.flightsapp.flights_app.exceptions.notFound.SeatNotFoundException;
 import com.santiago.flightsapp.flights_app.exceptions.notFound.UserNotFoundException;
 
+import jakarta.persistence.EntityNotFoundException;
+
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
     // Excepcion que ocurre cuando no se encuentra un usuario con el id pasado por
     // parametros
-    @ExceptionHandler({ UserNotFoundException.class, FlightNotFoundException.class, AirlineNotFoundException.class, SeatNotFoundException.class })
+    @ExceptionHandler({ UserNotFoundException.class, FlightNotFoundException.class, AirlineNotFoundException.class,
+            SeatNotFoundException.class })
     public ResponseEntity<ErrorResponse> idNotfound(Exception e) {
         ErrorResponse errorResponse = new ErrorResponse(404, "Error id no encontrado", e.getMessage());
 
@@ -85,12 +90,49 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(400).body(errorResponse);
     }
 
-    // Excepcion que ocurre cuando el vuelo ya esta vendido y se le quiere asignar a otro usuario
+    // Excepcion que ocurre cuando el vuelo ya esta vendido y se le quiere asignar a
+    // otro usuario
     @ExceptionHandler(SeatNotAvailableException.class)
     public ResponseEntity<ErrorResponse> flightNotAvailable(SeatNotAvailableException e) {
         ErrorResponse errorResponse = new ErrorResponse(400, "Bad request", e.getMessage());
 
         return ResponseEntity.status(400).body(errorResponse);
+    }
+
+    // Manejar violaciones de integridad (duplicados, FK, etc.)
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<ErrorResponse> handleDataIntegrity(DataIntegrityViolationException ex) {
+        // intenta obtener la causa más específica si existe
+        String cause = ex.getMostSpecificCause() != null ? ex.getMostSpecificCause().getMessage() : ex.getMessage();
+        ErrorResponse errorResponse = new ErrorResponse(409, "Data integrity violation", cause);
+        // log opcional: logger.error("DataIntegrityViolation", ex);
+        return ResponseEntity.status(409).body(errorResponse);
+    }
+
+    // Manejar errores de transaccion (ej: ConstraintViolationException envuelto)
+    @ExceptionHandler(TransactionSystemException.class)
+    public ResponseEntity<ErrorResponse> handleTransactionException(TransactionSystemException ex) {
+        Throwable root = ex.getRootCause();
+        String message = root != null ? root.getMessage() : ex.getMessage();
+        ErrorResponse errorResponse = new ErrorResponse(500, "Transaction error", message);
+        return ResponseEntity.status(500).body(errorResponse);
+    }
+
+    // Manejar EntityNotFoundException por si usas la JPA standard
+    @ExceptionHandler(EntityNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleEntityNotFound(EntityNotFoundException ex) {
+        ErrorResponse errorResponse = new ErrorResponse(404, "Not Found", ex.getMessage());
+        return ResponseEntity.status(404).body(errorResponse);
+    }
+
+    // Manejador genérico (fallback)
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ErrorResponse> handleAll(Exception ex) {
+        String message = ex.getMessage() != null ? ex.getMessage() : "Unexpected error";
+        ErrorResponse errorResponse = new ErrorResponse(500, "Internal Server Error", message);
+        // log completo para debug:
+        ex.printStackTrace();
+        return ResponseEntity.status(500).body(errorResponse);
     }
 
 }

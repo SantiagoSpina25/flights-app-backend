@@ -11,8 +11,11 @@ import jakarta.validation.constraints.NotNull;
 public class FlightCreateRequestDto {
 
     private String id;
-    private String origin;
-    private String destination;
+
+    @NotNull(message = "el id del aeropuerto de origen (originAirportId) es requerido")
+    private Long originAirportId;
+    @NotNull(message = "el id del aeropuerto de destino (destinationAirportId) es requerido")
+    private Long destinationAirportId;
 
     private LocalDate date = LocalDate.now();
     private LocalTime hour = LocalTime.now().truncatedTo(ChronoUnit.SECONDS);
@@ -21,39 +24,44 @@ public class FlightCreateRequestDto {
     @NotNull(message = "el id de la aerolinea (airlineId) es requerido")
     private Long airlineId;
 
-    public FlightCreateRequestDto() {}
+    public FlightCreateRequestDto() {
+    }
 
-    public FlightCreateRequestDto(String id, String origin, String destination, Long airlineId) {
+    public FlightCreateRequestDto(String id, Long originAirportId, Long destinationAirportId, Long airlineId) {
         this.id = id;
-        this.origin = origin;
-        this.destination = destination;
+        this.originAirportId = originAirportId;
+        this.destinationAirportId = destinationAirportId;
         this.airlineId = airlineId;
     }
 
     public String getId() {
         return id;
     }
+
     public void setId(String id) {
         this.id = id;
     }
 
-    public String getOrigin() {
-        return origin;
-    }
-    public void setOrigin(String origin) {
-        this.origin = origin;
+    public Long getOriginAirportId() {
+        return originAirportId;
     }
 
-    public String getDestination() {
-        return destination;
+    public void setOriginAirportId(Long originAirportId) {
+        this.originAirportId = originAirportId;
     }
-    public void setDestination(String destination) {
-        this.destination = destination;
+
+    public Long getDestinationAirportId() {
+        return destinationAirportId;
+    }
+
+    public void setDestinationAirportId(Long destinationAirportId) {
+        this.destinationAirportId = destinationAirportId;
     }
 
     public LocalDate getDate() {
         return date;
     }
+
     public void setDate(LocalDate date) {
         if (date != null) {
             this.date = date;
@@ -63,6 +71,7 @@ public class FlightCreateRequestDto {
     public LocalTime getHour() {
         return hour;
     }
+
     public void setHour(LocalTime hour) {
         if (hour != null) {
             this.hour = hour;
@@ -72,6 +81,7 @@ public class FlightCreateRequestDto {
     public Status getStatus() {
         return status;
     }
+
     public void setStatus(Status status) {
         if (status != null) {
             this.status = status;
@@ -81,8 +91,8 @@ public class FlightCreateRequestDto {
     public Long getAirlineId() {
         return airlineId;
     }
+
     public void setAirlineId(Long airlineId) {
         this.airlineId = airlineId;
     }
 }
-

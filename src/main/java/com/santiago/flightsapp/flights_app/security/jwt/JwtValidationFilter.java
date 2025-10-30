@@ -6,11 +6,11 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.Map;
 
 import javax.crypto.SecretKey;
 
-import org.springframework.http.HttpStatus;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
@@ -22,6 +22,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.santiago.flightsapp.flights_app.security.SimpleGrantedAuthorityJsonCreator;
 
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -29,6 +30,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 public class JwtValidationFilter extends BasicAuthenticationFilter {
+
+    private static final Logger logger = LoggerFactory.getLogger(JwtValidationFilter.class);
 
     public JwtValidationFilter(AuthenticationManager authenticationManager) {
         super(authenticationManager);
@@ -40,15 +43,19 @@ public class JwtValidationFilter extends BasicAuthenticationFilter {
 
         String header = request.getHeader(HEADER_AUTHORIZATION);
 
+        // If no Authorization header or doesn't start with prefix -> continue the chain
         if (header == null || !header.startsWith(PREFIX_TOKEN)) {
             chain.doFilter(request, response);
             return;
         }
 
-        String token = header.replace(PREFIX_TOKEN, "");
+        String token = header.replace(PREFIX_TOKEN, "").trim();
 
+        // 1) TRY only token parsing/validation — catch JwtException specifically
         try {
-            Claims claims = Jwts.parser().verifyWith((SecretKey) SECRET_KEY).build()
+            Claims claims = Jwts.parser()
+                    .verifyWith((SecretKey) SECRET_KEY)
+                    .build()
                     .parseSignedClaims(token)
                     .getPayload();
 
@@ -60,23 +67,35 @@ public class JwtValidationFilter extends BasicAuthenticationFilter {
                             .addMixIn(SimpleGrantedAuthority.class, SimpleGrantedAuthorityJsonCreator.class)
                             .readValue(authoritiesClaims.toString().getBytes(), SimpleGrantedAuthority[].class));
 
-            UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(username,
-                    null, authorities);
+            UsernamePasswordAuthenticationToken authenticationToken =
+                    new UsernamePasswordAuthenticationToken(username, null, authorities);
 
             SecurityContextHolder.getContext().setAuthentication(authenticationToken);
-            chain.doFilter(request, response);
 
-        } catch (Exception e) {
-            Map<String, String> body = new HashMap<>();
-            body.put("error", e.getMessage());
-            body.put("message", "El token JWT es invalido");
-
-            response.getWriter().write(new ObjectMapper().writeValueAsString(body));
-            response.setStatus(HttpStatus.UNAUTHORIZED.value());
+        } catch (JwtException | IllegalArgumentException ex) {
+            // token invalid / expired / malformed
+            logger.warn("Invalid JWT: {}", ex.getMessage());
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             response.setContentType(CONTENT_TYPE);
+            HashMap<String,String> body = new HashMap<>();
+            body.put("error", "Invalid JWT");
+            body.put("message", ex.getMessage());
+            response.getWriter().write(new ObjectMapper().writeValueAsString(body));
+            return;
+        } catch (Exception ex) {
+            // unexpected parsing error (rare) — log and return 401
+            logger.error("Unexpected error while validating JWT", ex);
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.setContentType(CONTENT_TYPE);
+            HashMap<String,String> body = new HashMap<>();
+            body.put("error", "JWT validation error");
+            body.put("message", ex.getMessage());
+            response.getWriter().write(new ObjectMapper().writeValueAsString(body));
             return;
         }
 
+        // 2) If token ok (authentication set), continue filter chain.
+        //    DO NOT catch general exceptions here — let them bubble to the global handler.
+        chain.doFilter(request, response);
     }
-
 }
