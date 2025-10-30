@@ -27,12 +27,15 @@ public record FlightDto(
 
         SeatsInfo seatsInfo = new SeatsInfo(totalSeats, availableSeats, soldSeats);
 
+        String originCityAndAirport = f.getOrigin().getCity() + " (" + f.getOrigin().getIATACode() +")";
+        String destinationCityAndAirport = f.getDestination().getCity() + " (" + f.getDestination().getIATACode() +")";
+
         return new FlightDto(
                 f.getId(),
                 f.getDate(),
                 f.getHour(),
-                f.getOrigin().getCity(),
-                f.getDestination().getCity(),
+                originCityAndAirport,
+                destinationCityAndAirport,
                 f.getAirline() != null ? f.getAirline().getName() : null,
                 seatsInfo);
     }
