@@ -33,7 +33,6 @@ public class SeatServiceImpl implements SeatService {
     @Autowired
     private UserRepository userRepository;
 
-
     @Transactional(readOnly = true)
     @Override
     public List<SeatDto> findAll() {
@@ -63,9 +62,12 @@ public class SeatServiceImpl implements SeatService {
         newSeat.setClassType(seat.getClassType());
         newSeat.setFlight(flight);
 
+        // Actualiza el precio
+        newSeat.updatePriceByDistance(flight.getDistanceKm());
+
         return SeatDto.toDto(repository.save(newSeat));
     }
-    
+
     @Transactional
     @Override
     public Optional<SeatDto> delete(Long id) {
@@ -91,29 +93,29 @@ public class SeatServiceImpl implements SeatService {
         if (!seatOptional.isPresent()) {
             throw new SeatNotFoundException(seatId);
         }
-        
+
         // verifica si existe el usuario
         if (!userOptional.isPresent()) {
             throw new UserNotFoundException(userId);
         }
 
-        //Verifica si el asiento sigue disponible
-        if(seatOptional.get().getStatus() != Status.AVAILABLE){
+        // Verifica si el asiento sigue disponible
+        if (seatOptional.get().getStatus() != Status.AVAILABLE) {
             throw new SeatNotAvailableException(seatId);
         }
 
-        //Si todo esta bien, le agrega el usuario al asiento
+        // Si todo esta bien, le agrega el usuario al asiento
         Seat seat = seatOptional.get();
         User user = userOptional.get();
 
         seat.setUser(user);
         seat.setStatus(Status.SOLD);
 
-        //Obtengo la lista de asientos del usuario y le agrego el nuevo
+        // Obtengo la lista de asientos del usuario y le agrego el nuevo
         List<Seat> userSeats = user.getSeats();
         userSeats.add(seat);
         user.setSeats(userSeats);
-        
+
         userRepository.save(user);
 
         Seat saved = repository.save(seat);

@@ -87,8 +87,8 @@ public class FlightServiceImpl implements FlightService {
         double lat2 = destinationAirport.getLatitude();
         double lon2 = destinationAirport.getLongitude();
         double distanceKm = GeoUtils.haversineDistanceKm(lat1, lon1, lat2, lon2);
-        
-        //Redonde en BigDecimal
+
+        // Redonde en BigDecimal
         BigDecimal distance = BigDecimal.valueOf(distanceKm).setScale(2, RoundingMode.HALF_UP);
 
         newFlight.setDistanceKm(distance);
@@ -134,10 +134,6 @@ public class FlightServiceImpl implements FlightService {
         Flight flight = repository.findById(flightId)
                 .orElseThrow(() -> new FlightNotFoundException(flightId));
 
-        if (numberOfSeats > 10) {
-            // Poner un limite
-        }
-
         Random random = new Random();
 
         for (int i = 0; i < numberOfSeats; i++) {
@@ -147,6 +143,7 @@ public class FlightServiceImpl implements FlightService {
             newSeat.setNumber(rowNumber + String.valueOf(seatLetter));
             newSeat.setClassType(classTypes.get(random.nextInt(3)));
             newSeat.setFlight(flight);
+            newSeat.updatePriceByDistance(flight.getDistanceKm());
             newSeatList.add(newSeat);
         }
 

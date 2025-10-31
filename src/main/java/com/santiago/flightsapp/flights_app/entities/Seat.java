@@ -1,5 +1,7 @@
 package com.santiago.flightsapp.flights_app.entities;
 
+import java.math.BigDecimal;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -35,7 +37,7 @@ public class Seat {
     private Status status = Status.AVAILABLE; // Por defecto disponible
 
     @Column(nullable = false)
-    private double price= 1000;
+    private double price = 1000;
 
     @ManyToOne
     @JoinColumn(name = "flight_id", nullable = false)
@@ -45,28 +47,42 @@ public class Seat {
     @JoinColumn(name = "user_id", nullable = true)
     private User user;
 
-    // Funcion para actualizar precio segun la clase
-    public void updatePriceByClassType() {
-        double basePrice = 1000;
 
-        switch (this.classType) {
+    //Metodo que actualiza el precio segun la distancia del vuelo y la clase del asiento
+    public void updatePriceByDistance(BigDecimal distanceKm) {
+        double basePrice = 1000.0;
+
+        switch (classType) {
             case ECONOMY:
-                this.price = basePrice;
+                price = basePrice;
                 break;
             case BUSINESS:
-                this.price = basePrice * 1.70;
+                price = basePrice * 1.70;
                 break;
             case FIRST_CLASS:
-                this.price = basePrice * 2.20;
+                price = basePrice * 2.20;
                 break;
             default:
-                this.price = basePrice;
+                price = basePrice;
         }
-    }
 
-    public void setClassType(ClassType classType) {
-        this.classType = classType;
-        updatePriceByClassType();
+        if (distanceKm != null) {
+            double distance = distanceKm.doubleValue();
+            double distanceMultiplier = 1.0;
+
+            if (distance > 7000)
+                distanceMultiplier = 1.60;
+            else if (distance > 3000)
+                distanceMultiplier = 1.40;
+            else if (distance > 1500)
+                distanceMultiplier = 1.25;
+            else if (distance > 500)
+                distanceMultiplier = 1.10;
+
+            price = price * distanceMultiplier;
+        }
+
+        price = Math.round(price * 100.0) / 100.0;
     }
 
 }
