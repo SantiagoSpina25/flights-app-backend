@@ -17,6 +17,7 @@ import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
+import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
@@ -39,6 +40,10 @@ public class User {
     @Size(min = 4, max = 80)
     @Column(nullable = false, length = 80)
     private String password;
+
+    @Max(value = 99999)
+    @Column(nullable = false)
+    private int balance = 0;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Seat> seats = new ArrayList<>();

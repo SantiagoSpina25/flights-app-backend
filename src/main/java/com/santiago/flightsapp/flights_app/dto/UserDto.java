@@ -10,6 +10,7 @@ public record UserDto(
         Long id,
         String username,
         String password,
+        int balance,
         boolean admin,
         List<TicketDto> tickets) {
 
@@ -36,6 +37,7 @@ public record UserDto(
                 user.getId(),
                 user.getUsername(),
                 user.getPassword(),
+                user.getBalance(),
                 isAdmin,
                 tickets);
     }
