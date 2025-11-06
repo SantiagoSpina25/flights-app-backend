@@ -13,6 +13,7 @@ import com.santiago.flightsapp.flights_app.entities.Flight;
 import com.santiago.flightsapp.flights_app.entities.Seat;
 import com.santiago.flightsapp.flights_app.entities.Status;
 import com.santiago.flightsapp.flights_app.entities.User;
+import com.santiago.flightsapp.flights_app.exceptions.InsufficientBalanceException;
 import com.santiago.flightsapp.flights_app.exceptions.SeatNotAvailableException;
 import com.santiago.flightsapp.flights_app.exceptions.notFound.FlightNotFoundException;
 import com.santiago.flightsapp.flights_app.exceptions.notFound.SeatNotFoundException;
@@ -104,9 +105,17 @@ public class SeatServiceImpl implements SeatService {
             throw new SeatNotAvailableException(seatId);
         }
 
+        //Verifica si el usuario tiene suficientes fondos para comprar el asiento
+        if(seatOptional.get().getPrice() > userOptional.get().getBalance()){
+            throw new InsufficientBalanceException();
+        }
+
         // Si todo esta bien, le agrega el usuario al asiento
         Seat seat = seatOptional.get();
         User user = userOptional.get();
+
+        //Le resta el dinero al usuario
+        user.setBalance((int) (user.getBalance() - seat.getPrice()));
 
         seat.setUser(user);
         seat.setStatus(Status.SOLD);

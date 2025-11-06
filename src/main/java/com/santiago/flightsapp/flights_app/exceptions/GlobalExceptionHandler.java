@@ -99,6 +99,15 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(400).body(errorResponse);
     }
 
+    // Excepcion que ocurre cuando el precio del asiento es mayor al dinero del
+    // usuario al querer comprarlo
+    @ExceptionHandler(InsufficientBalanceException.class)
+    public ResponseEntity<ErrorResponse> insufficientBalance(InsufficientBalanceException e) {
+        ErrorResponse errorResponse = new ErrorResponse(400, "Bad request", e.getMessage());
+
+        return ResponseEntity.status(400).body(errorResponse);
+    }
+
     // Manejar violaciones de integridad (duplicados, FK, etc.)
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ResponseEntity<ErrorResponse> handleDataIntegrity(DataIntegrityViolationException ex) {
