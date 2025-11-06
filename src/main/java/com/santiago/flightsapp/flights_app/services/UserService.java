@@ -14,5 +14,7 @@ public interface UserService {
 
     UserDto save(User user);
 
+    Optional<UserDto> addBalance(Long id, int balance);
+
     Optional<UserDto> delete(Long id);
 } 

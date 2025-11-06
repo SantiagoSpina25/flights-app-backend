@@ -73,4 +73,16 @@ public class UserServiceImpl implements UserService {
         return userOptional;
     }
 
+    @Override
+    public Optional<UserDto> addBalance(Long id, int balance) {
+        return repository.findById(id)
+                .map(user -> {
+                    user.setBalance(user.getBalance() + balance);
+
+                    User updatedUser = repository.save(user);
+
+                    return UserDto.toDto(updatedUser);
+                });
+    }
+
 }

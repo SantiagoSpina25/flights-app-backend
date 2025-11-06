@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.santiago.flightsapp.flights_app.dto.AddBalanceRequest;
 import com.santiago.flightsapp.flights_app.dto.UserDto;
 import com.santiago.flightsapp.flights_app.entities.User;
 import com.santiago.flightsapp.flights_app.exceptions.notFound.UserNotFoundException;
@@ -45,13 +46,18 @@ public class UserController {
     @GetMapping("/{id}")
     public ResponseEntity<?> findById(@PathVariable Long id) {
         Optional<UserDto> userOptional = service.findById(id);
-        
+
         return ResponseEntity.ok(userOptional.orElseThrow(() -> new UserNotFoundException(id)));
     }
 
     @PostMapping("/register")
     public ResponseEntity<?> create(@Valid @RequestBody User user) {
         return ResponseEntity.status(HttpStatus.CREATED).body(service.save(user));
+    }
+
+    @PostMapping("/addBalance")
+    public ResponseEntity<?> addBalance(@Valid @RequestBody AddBalanceRequest request) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(service.addBalance(request.id(), request.balance()));
     }
 
     @DeleteMapping("/{id}")
