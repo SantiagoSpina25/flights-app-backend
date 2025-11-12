@@ -239,19 +239,19 @@ Content-Type: application/json
 
 {
   "userId": 1,
-  "seatId": 42
+  "seatId": 40
 }
 ```
 
 **Respuesta (ejemplo)**
 ```json
 {
-  "message": "Seat booked successfully",
-  "ticket": {
-    "flightId": 5,
-    "seatNumber": "12A",
-    "userId": 1
-  }
+    "id": 40,
+    "number": "16B",
+    "status": "SOLD",
+    "classType": "ECONOMY",
+    "price": 1600.0,
+    "flightId": "EMI001"
 }
 ```
 
