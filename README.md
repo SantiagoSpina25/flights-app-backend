@@ -130,7 +130,7 @@ Ejemplo: para listar todos los usuarios, la ruta completa sería `/api/users`.
 {
     "username": "admin",
     "password": "admin",
-    "admin": true //Opcional
+    "admin": true //Opcional (por defecto false)
 }
 ```
 
