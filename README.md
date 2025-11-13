@@ -5,7 +5,9 @@
 
 **Flights App Backend** is a REST API built with **Spring Boot** that manages information about flights, airlines, airports, seats, and users.  
 It is part of the **Flights App** project, a complete platform for managing flight reservations.
+
 ---
+
 ## 🚀 Technologies Used
 
 - **Java 17**
