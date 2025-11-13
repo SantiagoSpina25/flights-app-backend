@@ -5,7 +5,7 @@
 
 **Flights App Backend** is a REST API built with **Spring Boot** that manages information about flights, airlines, airports, seats, and users.  
 It is part of the **Flights App** project, a complete platform for managing flight reservations.
-
+---
 ## 🚀 Technologies Used
 
 - **Java 17**
@@ -17,7 +17,7 @@ It is part of the **Flights App** project, a complete platform for managing flig
 - **JWT (io.jsonwebtoken - jjwt)**
 - **Lombok**
 - **BCryptPasswordEncoder**
-
+---
 ## ✨ Features & Functionality
 
 ### 🔐 Security & Authentication
@@ -40,6 +40,8 @@ It is part of the **Flights App** project, a complete platform for managing flig
 - Custom **access denied** and **error** responses
 - Detailed validation and error messages for each operation
 
+---
+
 ## 📦 Dependencies
 
 Main dependencies included in `pom.xml`:
@@ -56,6 +58,8 @@ Main dependencies included in `pom.xml`:
 
 >Note: The pom.xml also includes the `spring-boot-maven-plugin`, used for packaging the project and running it with `mvn spring-boot:run` or `mvn package`.
 
+---
+
 ## 🧱 Project Structure
 The backend is structured into layers to maintain clean and modular code:
 ```
@@ -71,7 +75,7 @@ src/main/java/com/santiago/flightsapp/flights_app
 ├── utils/
 └── FlightsAppApplication.java
 ```
-
+---
 ## 🤝 Frontend Integration
 
 If you want a smoother and more intuitive user experience, I invite you to use the frontend part of the project, where you can access all the features in a much more visual way.
@@ -79,7 +83,7 @@ If you want a smoother and more intuitive user experience, I invite you to use t
 * Frontend repository: [flights-app frontend](https://github.com/SantiagoSpina25/flights-app-frontend)
 
 * Both projects must share the same **CORS configuration** and **base URL**.
-
+---
 ## 🗃️ Entities
 
 | Entity | Description |
@@ -91,6 +95,7 @@ If you want a smoother and more intuitive user experience, I invite you to use t
 | Airport | Origin/destination airports |
 | Country / Continent | Geographic references |
 
+---
 ## ⚙️ Database Configuration
 
 Configure your `application.properties` file with your MySQL credentials.
@@ -109,6 +114,7 @@ spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MySQLDialect
 server.port=8080
 ```
 
+---
 ## 🧩 Running the Project
 
 1. Clone the repository:
