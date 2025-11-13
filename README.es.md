@@ -1,5 +1,8 @@
 # ✈️ Flights App Backend
 
+🌐 Lenguajes disponibles:  
+[English](README.md) | [Español](README.es.md)
+
 **Flights App Backend** es una API REST desarrollada con **Spring Boot** que gestiona información de vuelos, aerolíneas, aeropuertos, asientos y usuarios.  
 Forma parte del proyecto **Flights App**, una aplicación completa para la gestión de reservas de vuelos.
 
