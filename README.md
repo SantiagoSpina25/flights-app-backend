@@ -76,7 +76,7 @@ src/main/java/com/santiago/flightsapp/flights_app
 
 If you want a smoother and more intuitive user experience, I invite you to use the frontend part of the project, where you can access all the features in a much more visual way.
 
-* Frontend repository: https://github.com/SantiagoSpina25/flights-app-frontend
+* Frontend repository: [flights-app frontend](https://github.com/SantiagoSpina25/flights-app-frontend)
 
 * Both projects must share the same **CORS configuration** and **base URL**.
 
