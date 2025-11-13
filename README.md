@@ -48,15 +48,15 @@ It is part of the **Flights App** project, a complete platform for managing flig
 
 Main dependencies included in `pom.xml`:
 
-- `spring-boot-starter-data-jpa`
-- `spring-boot-starter-web`
-- `spring-boot-devtools`
-- `mysql-connector-j`
-- `spring-boot-starter-test`
-- `spring-boot-starter-validation`
-- `io.jsonwebtoken:jjwt-*`
-- `spring-boot-starter-security`
-- `lombok`
+- `spring-boot-starter-data-jpa` — Integration with Spring Data JPA and Hibernate for persistence.
+- `spring-boot-starter-web` — Support for building web and REST applications (Spring MVC, embedded Tomcat).
+- `spring-boot-devtools` — Development tools (auto-restart, live reload). (scope: runtime)
+- `mysql-connector-j` — JDBC connector for MySQL. (scope: runtime) 
+- `spring-boot-starter-test` — Testing dependencies for Spring. (scope: test)  
+- `spring-boot-starter-validation` — Validation support using `javax.validation` / `jakarta.validation`.
+- `io.jsonwebtoken:jjwt-api`, `jjwt-impl`, `jjwt-jackson` — JWT library used for authentication/authorization. 
+- `spring-boot-starter-security` — Spring Security for securing the API.
+- `lombok` — Reduces boilerplate code (getters/setters, constructors, builder, etc.). (annotationProcessor)
 
 >Note: The pom.xml also includes the `spring-boot-maven-plugin`, used for packaging the project and running it with `mvn spring-boot:run` or `mvn package`.
 
