@@ -19,6 +19,30 @@ Forma parte del proyecto **Flights App**, una aplicación completa para la gesti
 
 ---
 
+## ✨ Características y funcionalidades
+
+### 🔐 Seguridad y autenticación
+- Autenticación segura con **JWT**
+- Roles de usuario: **Administrador** y **Usuario**
+- Rutas protegidas según permisos
+
+### 🛫 Gestión de vuelos y aerolíneas
+- CRUD completo de **vuelos**, **usuarios**, **aerolíneas** y **asientos**
+- Generación manual de **asientos aleatorios** para un vuelo
+- **Reserva de asientos** disponibles en tiempo real
+- **Cálculo automático del precio** según la clase del asiento y la **distancia** entre aeropuertos de origen y destino
+
+### 💳 Operaciones de usuario
+- Posibilidad de **agregar saldo** a la cuenta del usuario
+- **Compra de asientos** según clase y disponibilidad
+
+### 🧭 Navegación y experiencia de uso
+- Navegación fluida e intuitiva entre rutas protegidas
+- Página personalizada de **error o acceso denegado**
+- Manejo de **mensajes de validación y errores** claros en cada operación
+
+---
+
 ## 📦 Dependencias
 
 A continuación las dependencias principales incluidas en el `pom.xml` del proyecto y una breve descripción de su uso:
@@ -37,7 +61,7 @@ A continuación las dependencias principales incluidas en el `pom.xml` del proye
 
 ---
 
-## 🧱 Arquitectura del proyecto
+## 🧱 Estructura del proyecto
 
 El backend está estructurado en capas para mantener un código limpio y modular:
 
@@ -55,6 +79,16 @@ src/main/java/com/santiago/flightsapp/flights_app
 └── FlightsAppApplication.java  # Clase principal de la aplicación
 
 ```
+---
+
+## 🤝 Conexión con el frontend
+
+Si quieres una experiencia de usuario más fácil e intuitiva de usar, te invito a usar la parte frontend del proyecto, en la que podras acceder a todas las funcionalidades pero de una forma mucho más visual
+
+* Repositorio frontend: **[flights-app-frontend](https://github.com/SantiagoSpina25/flights-app-frontend)**
+
+* Ambos proyectos deben compartir la misma configuración de CORS y URL base.
+
 
 ---
 
