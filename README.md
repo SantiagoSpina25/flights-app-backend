@@ -92,7 +92,7 @@ server.port=8080
 
 1. Clona el repositorio:
    ```bash
-   git clone https://github.com/tuusuario/flights-app-backend.git
+   git clone https://github.com/SantiagoSpina25/flights-app-backend.git
    ```
 2. Abre el proyecto en **Visual Studio Code** (o tu IDE preferido).
 3. Ejecuta la aplicación desde el botón de **Run Spring Boot** o mediante terminal:
