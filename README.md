@@ -111,7 +111,7 @@ server.port=8080
 
 ## 🧩 Running the Project
 
-1. Clona el repositorio:
+1. Clone the repository:
    ```bash
    git clone https://github.com/SantiagoSpina25/flights-app-backend.git
    ```
