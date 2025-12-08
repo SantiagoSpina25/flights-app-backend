@@ -100,21 +100,24 @@ If you want a smoother and more intuitive user experience, I invite you to use t
 ---
 ## ⚙️ Database Configuration
 
-Configure your `application.properties` file with your MySQL credentials.
+Configure your `application.properties` file with your `MySQL` credentials.
 
-Recommended minimal example:
+In my case, I’m using environment variables to hide the credentials, but if you want to use this project for testing purposes, you can configure it like this:
 
-```
+```properties
 spring.datasource.url=jdbc:mysql://localhost:3306/flightsdb
 spring.datasource.username=your_user
 spring.datasource.password=your_password
-
-spring.jpa.hibernate.ddl-auto=update
-spring.jpa.show-sql=true
-spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MySQLDialect
-
-server.port=8080
 ```
+If you prefer to use environment variables, your application.properties will look like this:
+
+```properties
+spring.datasource.url=${DB_URL}
+spring.datasource.username=${DB_USERNAME}
+spring.datasource.password=${DB_PASSWORD}
+```
+
+(I configured the variables using the IntelliJ IDE)
 
 ---
 ## 🧩 Running the Project
