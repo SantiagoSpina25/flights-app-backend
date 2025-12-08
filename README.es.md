@@ -11,7 +11,7 @@ Forma parte del proyecto **Flights App**, una aplicación completa para la gesti
 ## 🚀 Tecnologías utilizadas
 
 - **Java 17**
-- **Spring Boot 3.x**
+- **Spring Boot 3.5.6**
 - **Spring Data JPA (Hibernate)**
 - **Spring Security**
 - **MySQL** (Connector/J)
