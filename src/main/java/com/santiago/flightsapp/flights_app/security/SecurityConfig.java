@@ -51,6 +51,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(
                         (auth) -> auth.requestMatchers(HttpMethod.POST, "/api/users/register").permitAll()
                                 .requestMatchers(HttpMethod.POST, "/login").permitAll()
+                                .requestMatchers(HttpMethod.GET, "/api/airlines").permitAll() //Ruta publica para testear funcionamiento
                                 .anyRequest().authenticated())
                 .csrf(config -> config.disable())
                 .cors(cors -> cors.configurationSource(configurationSource()))
