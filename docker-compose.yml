@@ -1,0 +1,12 @@
+version: "3.9"
+
+services:
+  flights-app:
+    build: .
+    container_name: flights-app
+    ports:
+      - "8080:8080"
+    environment:
+      DB_URL: ${DB_URL}
+      DB_USERNAME: ${DB_USERNAME}
+      DB_PASSWORD: ${DB_PASSWORD}
