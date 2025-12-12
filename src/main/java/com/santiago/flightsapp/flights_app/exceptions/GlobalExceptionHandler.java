@@ -134,6 +134,16 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(404).body(errorResponse);
     }
 
+    // Excepcion que ocurre cuando el usuario no tiene permisos para acceder al
+    // recurso
+    @ExceptionHandler(org.springframework.security.access.AccessDeniedException.class)
+    public ResponseEntity<ErrorResponse> handleAccessDenied(
+            org.springframework.security.access.AccessDeniedException ex) {
+        ErrorResponse errorResponse = new ErrorResponse(403, "Forbidden",
+                "No tienes permisos para acceder a este recurso");
+        return ResponseEntity.status(403).body(errorResponse);
+    }
+
     // Manejador genérico (fallback)
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleAll(Exception ex) {
